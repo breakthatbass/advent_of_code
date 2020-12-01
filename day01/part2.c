@@ -92,6 +92,7 @@ int main(int argc, char **argv)
 
 	printf("The answer is...%d\n", total);
 
+	free(nums);
 	fclose(fp);
 
 	return 0;
