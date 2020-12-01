@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <string.h>
 
 #define MAXDIGIT 10
 
@@ -45,8 +47,8 @@ int *load_array(char *file, int file_length)
 }
 
 
-// twenty20: find the first two numbers in arr that add up to 2020
-int twenty20(int *arr, int len)
+// find the first two numbers in arr that add up to 2020
+int part1(int *arr, int len)
 {
 	int i, j;
 	int mult = 0;
@@ -63,11 +65,30 @@ int twenty20(int *arr, int len)
 }
 
 
+// find the first THREE numbers in arr that add up to 2020
+int part2(int *arr, int len)
+{
+	int i, j, k;
+	int mult = 0;
+
+	for (i = 0; i < len; i++) {
+		for (j = 0; j < len; j++) {
+			for (k = 0; k < len; k++) {
+				if (*(arr+i) + *(arr+j) + *(arr+k) == 2020) {
+					mult = *(arr+i) * *(arr+j) * *(arr+k);
+					return mult;
+				}
+			} 
+		}
+	}
+	return mult;
+}
+
+
 
 int main(int argc, char **argv)
 {
 	FILE *fp;
-	int *nums;
 	char *file;
 
 	if (argc != 2) {
@@ -84,13 +105,21 @@ int main(int argc, char **argv)
 	}
 
 	int len = count_lines(fp);
-	nums = load_array(file, len);
-	int total  = twenty20(nums, len);
+	int *nums = load_array(file, len);
+	int part1_total  = part1(nums, len);
+	int part2_total = part2(nums, len);
 
-	printf("The answer is...%d\n", total);
+	// tests
+	if (strcmp(file, "input_test") == 0) {
+		assert(part1_total == 514579);
+		assert(part2_total == 241861950);
+	}
+
+	printf("The answer is...\n\tpart 1: %d\n\tpart 2: %d\n", part1_total, part2_total);
 	
 	free(nums);
 	fclose(fp);
 
 	return 0;
 }
+
