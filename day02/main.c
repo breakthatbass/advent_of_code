@@ -1,11 +1,3 @@
-
-
-// read from file
-// each line determine if it is valid
-//		vars for low and high and char, var for actual amount
-//		if valid, add to count
-//		if not, continue
-//
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
