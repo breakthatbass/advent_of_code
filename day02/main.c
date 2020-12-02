@@ -13,7 +13,7 @@ struct policy {
 #define MAXLINE 30
 
 
-// break string into tokens and set them as varibles
+// break string into tokens and set them in the struct
 policy load_struct(char *line)
 {
 	policy tmp;
@@ -26,7 +26,8 @@ policy load_struct(char *line)
 	return tmp;
 }
 
-// check if password is valid
+
+// sled: check if password is valid according to sled policy
 int sled(policy tmp)
 {
 	int i;
@@ -44,6 +45,8 @@ int sled(policy tmp)
 	return 1;
 }
 
+
+// toboggan: check if password is valid according to toboggan policy
 int toboggan(policy tmp)
 {
 	// XOR - make sure only one condition is true
