@@ -27,7 +27,7 @@ policy load_struct(char *line)
 }
 
 // check if password is valid
-int check_pass(policy tmp)
+int sled(policy tmp)
 {
 	int i;
 	int count = 0;
@@ -39,12 +39,18 @@ int check_pass(policy tmp)
 	}
 	
 	if (count < tmp.low || count > tmp.high) {
-		printf("ILLEGAL PASSWORD\n");
 		return 0;
 	}
-	
-	printf("VALID\n");
 	return 1;
+}
+
+int toboggan(policy tmp)
+{
+	// XOR - make sure only one condition is true
+	if (tmp.pass[tmp.low] == tmp.letter ^ tmp.pass[tmp.high] == tmp.letter)
+		return 1;
+
+	return 0;
 }
 
 
@@ -56,7 +62,8 @@ int main(int argc, char **argv)
 	int i, c;
 	policy tmp;	
 
-	int valid = 0; // keep track of valid passwords
+	int valid_sled = 0; // keep track of valid sled passwords
+	int valid_toboggan = 0; // keep track of valid toboggan passwords
 
 	if (argc != 2) {
 		fprintf(stderr, "usage: ./a.out <input-file>\n");
@@ -76,8 +83,15 @@ int main(int argc, char **argv)
 		if (c == '\n') {
 			buffer[i++] = '\n'; // prevent strtok from reading into next line
 			policy tmp = load_struct(buffer);
-			int n = check_pass(tmp);
-			valid += n;
+			
+			// part one: sled policy
+			int n = sled(tmp);
+			valid_sled += n;
+
+			// part two: toboggan policy
+			int k = toboggan(tmp);
+			valid_toboggan += k;
+
 			// flush out buffer
 			memset(buffer, 0, MAXLINE);
 			i = 0;
@@ -88,7 +102,8 @@ int main(int argc, char **argv)
 
 	fclose(fp);
 
-	printf("valid passwords: %d\n", valid);
+	printf("valid sled passwords: %d\n", valid_sled);
+	printf("valid toboggan passwords: %d\n", valid_toboggan);
 
 	return 0;
 }
