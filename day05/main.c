@@ -32,6 +32,8 @@ int count_lines(char *file)
 	return count;
 }
 
+
+// get row chars
 char *get_row(char *tkt)
 {
     char *row = (char*)malloc(sizeof(char)*ROW);
