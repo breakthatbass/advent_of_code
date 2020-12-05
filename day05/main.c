@@ -6,7 +6,6 @@
 #define ROW 8
 #define COL 4
 
-
 // for use with qsort()
 int cmpfunc (const void * a, const void * b) {return ( *(int*)a - *(int*)b );}
 
@@ -160,6 +159,5 @@ int main(int argc, char **argv)
     int my_seat = get_tkt(ids, file_len);
     printf("my seat: %d\n", my_seat);
     
-
     return 0;
 }
