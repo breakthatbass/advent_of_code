@@ -6,21 +6,21 @@
 
 int part1(int *a, int len)
 {
-	int i, j;
-	int mult = 0;
-	int passes = 0;
+ int i, j;
+ int mult = 0;
+ int passes = 0;
 
-	for (i = 0; i < len; i++) {
-		for (j = 0; j < len; j++) {
-			passes++;
-			if (*(a+i) + *(a+j) == 2020) {
-				mult = *(a+i) * *(a+j);
-				printf("part1 passes: %d\n", passes);
-				return mult;
-			}
-		}
-	}
-	return mult;
+ for (i = 0; i < len; i++) {
+ for (j = 0; j < len; j++) {
+  passes++;
+  if (*(a+i) + *(a+j) == 2020) {
+   mult = *(a+i) * *(a+j);
+   printf("part1 passes: %d\n", passes);
+    return mult;
+   }
+  }
+ }
+ return mult;
 }
 
 
