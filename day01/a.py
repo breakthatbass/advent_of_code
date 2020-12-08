@@ -13,7 +13,7 @@ for num1 in nums:
         if n == 2020:
             part1 = num1*num2
 
-#part3
+#part2
 for num1 in nums:
     for num2 in nums:
         for num3 in nums:
