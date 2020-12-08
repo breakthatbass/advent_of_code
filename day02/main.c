@@ -17,7 +17,7 @@ struct policy {
 policy load_struct(char *line)
 {
 	policy tmp;
-	
+		
 	tmp.low = atoi(strtok(line, "-"));
 	tmp.high = atoi(strtok(NULL, " "));
 	tmp.letter = *strtok(NULL, ":");

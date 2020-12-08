@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-g -lm -g -std=c99 -pedantic
 SRC_FILES=main.c ../helpers.c
-NAME=passport
+NAME=board
 
 all : $(NAME)
 

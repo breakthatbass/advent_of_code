@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <advent.h>
 
 #define MAXLINE 250
-#define ALPHAMAX 26
+#define ALPHAMAX 28
 
 
-void errmsg(char *msg);
+//void errmsg(char *msg);
 FILE *file_ptr(char *file);
 
 // for use with qsort()
@@ -16,17 +17,20 @@ int cmpfunc (const void * a, const void * b) {return ( *(char*)a - *(char*)b );}
 // get answers from group
 int get_answers(char *s)
 {	
-	int i;
+	int i, j;
 	int count = 0;
 	size_t len = strlen(s);
+	int *answer = calloc(len, sizeof(char));
 
-	qsort(s, len, sizeof(char), cmpfunc);
-
-	for (i = 0; i < len; i++) {
+	for (i = 0, j = 0; i < len; i++) {
 		if (s[i] == '\n') continue;
-		if (s[i] == s[i+1]) continue;
-		else count++;
+		if (answer[s[i]] == 1) continue;
+		if (answer[s[i]] == 0) {
+			answer[s[i]] = 1;
+			count++;
+		}
 	}
+	
 	printf("%d\n", count);
 	return count;
 }
@@ -69,14 +73,14 @@ int main(int argc, char **argv)
 
 
 // HELPERS...
-
+/*
 // errmsg: print msg and exit
 void errmsg(char *msg)
 {
     fprintf(stderr, "%s\n", msg);
     exit(1);
 }
-
+*/
 
 // file_ptr: open a file ptr, error check, return the ptr
 FILE *file_ptr(char *file)

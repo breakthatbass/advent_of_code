@@ -10,22 +10,13 @@ unsigned long bag_list_len = 0;
 
 struct bag {
     char *bag_name;
-    char *holds;
+    char *bag1;
+    char *bag2;
+    char *bag3;
+    char *bag4;
+    struct bag *next;
 }; typedef struct bag bag;
 
-/*
-char **init_arr(int len)
-{
-    char **arr = malloc(sizeof(char)*len);
-    if (arr == NULL) errmsg("malloc failed");
-    int i;
-    for (i = 0; i < len; i++) {
-        arr[i] = malloc(sizeof(char)*MAXLINE);
-        if(arr[i] == NULL) errmsg("malloc failed");
-    }
-    return arr;
-}
-*/
 
 bag parse_bags(char *buf)
 {
@@ -54,48 +45,6 @@ bag parse_bags(char *buf)
     return tmp;
 }
 
-void loop(char *bag_name, char *holds)
-{
-    int i;
-    int broke = 0;
-    for (i = 0; i < bag_list_len; i++) {
-        if (strstr(holds, bag_list[i]) != NULL) {
-            for (i = 0; i < bag_list_len; i++) {
-                if (strcmp(bag_list[i], bag_name) == 0) {
-                    broke = 1;
-                    break;
-                }
-            }
-            if (broke == 0) {
-                bag_list[bag_list_len++] = bag_name;
-                printf("\nADDED TO LIST: %s\n\n", bag_name);
-            }
-            else broke = 0;
-        }
-    }
-}
-
-
-void keep_checking(char *file)
-{
-    FILE *fp = file_ptr(file);
-
-    char buf[MAXLINE];
-
-    int c; 
-    int i = 0;
-    while ((c = fgetc(fp)) != EOF) {
-        if (c == '.') {
-            bag cur = parse_bags(buf);
-            loop(cur.bag_name, cur.holds);
-            memset(buf, 0, MAXLINE);
-            i=0;
-        } else buf[i++] = c;
-    } 
-    fclose(fp);
-}
-
-
 
 int main(int argc, char **argv)
 {
@@ -122,15 +71,6 @@ int main(int argc, char **argv)
         } else buf[i++] = c;
     } 
 
-
-    while (1) {
-        int n = bag_list_len;
-        printf("%lu\n", bag_list_len);
-        keep_checking(file);
-        printf("%lu\n", bag_list_len);
-        if (n == bag_list_len) break;
-        n = bag_list_len;
-    }
 
     for (i = 0; i < bag_list_len; i++) 
         printf("%s\n", bag_list[i]);
