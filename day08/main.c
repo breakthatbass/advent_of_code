@@ -17,6 +17,8 @@ boot gameboy[MAXBOOT];
 int len = 0;
 int accumulator = 0;
 
+
+// add instructions into the struct
 boot *load_code(char *instruction, char *value)
 {
 	boot *tmp = malloc(sizeof(boot));
@@ -29,6 +31,34 @@ boot *load_code(char *instruction, char *value)
 
 	return tmp;
 }
+
+
+// run the instructions
+void exec_boot_code(boot *code)
+{
+	int i = 0;
+	while (code[i].touched == 0) {
+		if (code[i].touched == 1) break;
+		if (strcmp(code[i].instr, "acc") == 0) 
+		{
+			code[i].touched = 1;
+			if (code[i].sign == '-') accumulator -= code[i++].value;
+			else accumulator += code[i++].value;
+		} 
+		else if (strcmp(code[i].instr, "jmp") == 0) 
+		{
+			code[i].touched = 1;
+			if (code[i].sign == '-') {
+				i -= code[i].value;
+			}
+			else {
+				i += code[i].value;
+			}
+		}
+		else code[i++].touched = 1; // nop instruction
+	}
+}
+
 
 int main()
 {
@@ -43,27 +73,7 @@ int main()
 		len++;
 	}
 
-	i = 0;
-	while (gameboy[i].touched == 0) {
-		if (gameboy[i].touched == 1) break;
-		if (strcmp(gameboy[i].instr, "acc") == 0) 
-		{
-			gameboy[i].touched = 1;
-			if (gameboy[i].sign == '-') accumulator -= gameboy[i++].value;
-			else accumulator += gameboy[i++].value;
-		} 
-		else if (strcmp(gameboy[i].instr, "jmp") == 0) 
-		{
-			gameboy[i].touched = 1;
-			if (gameboy[i].sign == '-') {
-				i -= gameboy[i].value;
-			}
-			else {
-				i += gameboy[i].value;
-			}
-		}
-		else gameboy[i++].touched = 1; // nop instruction
-	}
+	exec_boot_code(gameboy);
 	printf("part1: %d\n", accumulator);
 		
 	return 0;
