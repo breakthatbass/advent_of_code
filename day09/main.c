@@ -47,8 +47,8 @@ int main()
 
 
 	// PART 2
-	int pos = 0;		// first position of segment when found
-	int passes = 0;		// length of our new array
+	int pos = 0;	
+	int passes = 0;
 	int broke = 0;
 	unsigned long total = 0;
 	for (i = 0; i < len; i++) {
@@ -70,8 +70,6 @@ int main()
 	
 	unsigned long low=nums[pos];
 	unsigned long high=0;
-
-	unsigned long ntotal = 0;
 
 	for (i = 0; i < passes; i++) {
 		if (nums[pos+i] > high) high = nums[pos+i];
