@@ -49,40 +49,24 @@ int sled(policy tmp)
 // toboggan: check if password is valid according to toboggan policy
 int toboggan(policy tmp)
 {
-	// XOR - make sure only one condition is true
+	// XOR for the win
 	if (tmp.pass[tmp.low] == tmp.letter ^ tmp.pass[tmp.high] == tmp.letter)
 		return 1;
-
 	return 0;
 }
 
 
 int main(int argc, char **argv)
 {
-	FILE *fp;
-	char *file;
 	char buffer[MAXLINE];
 	int i, c;
 	policy tmp;	
 
-	int valid_sled = 0; // keep track of valid sled passwords
+	int valid_sled = 0;		// keep track of valid sled passwords
 	int valid_toboggan = 0; // keep track of valid toboggan passwords
-
-	if (argc != 2) {
-		fprintf(stderr, "usage: ./a.out <input-file>\n");
-		exit(1);
-	}
-
-	file = argv[1];
-	fp = fopen(file, "r");
-	if (fp == NULL) {
-		fprintf(stderr, "cannot open file\n");
-		exit(1);
-	}
-
-	// read from file and check if password is valid when end of line is reach
+	
 	i = 0;
-	while ((c = fgetc(fp)) != EOF) {
+	while ((c = fgetc(stdin)) != EOF) {
 		if (c == '\n') {
 			buffer[i++] = '\n'; // prevent strtok from reading into next line
 			policy tmp = load_struct(buffer);
@@ -102,8 +86,6 @@ int main(int argc, char **argv)
 		else
 			buffer[i++] = (char)c;
 	}
-
-	fclose(fp);
 
 	printf("valid sled passwords: %d\n", valid_sled);
 	printf("valid toboggan passwords: %d\n", valid_toboggan);
