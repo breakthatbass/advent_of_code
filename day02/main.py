@@ -10,11 +10,9 @@ def makearr(password):
     high = int(high[0])
     letter = letter[0]
     pw = pw[0]
-
     return low, high, letter, pw
 
 def check_pass(p):
-    
     count = 0
     for i in p[3]:
         if p[2] == i:
@@ -27,8 +25,9 @@ def check_pass(p):
 def part2(p):
     pw = p[3]
     letter = p[2]
-    low = p[0]
-    high = p[1]
+    low = p[0]-1
+    high = p[1]-1
+
     if (pw[low] == letter) ^ (pw[high] == letter):
         return 1
     else: 
