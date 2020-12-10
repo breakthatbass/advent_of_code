@@ -1,15 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <err.h>
 
 #define MAXLINE 100
-
-// errmsg: print msg and exit
-void errmsg(char *msg)
-{
-    fprintf(stderr, "%s\n", msg);
-    exit(1);
-}
 
 
 // file_ptr: open a file ptr, error check, return the ptr
@@ -18,7 +12,7 @@ FILE *file_ptr(char *file)
     FILE *fp;
 
     fp = fopen(file, "r");
-    if (fp == NULL) errmsg("cannot open file");
+    if (fp == NULL) errx(1, "cannot open file");
 
     return fp;
 }
@@ -50,11 +44,11 @@ int **init_arr(int file_len)
     int i;
     
     hill = malloc(sizeof(int*)*file_len);
-    if (hill == NULL) errmsg("malloc failed");
+    if (hill == NULL) errx(1, "malloc failed");
 
     for (i = 0; i < file_len; i++) {
         hill[i] = calloc(file_len*file_len, sizeof(int) * file_len);
-            if (hill[i] == NULL) errmsg("calloc failed");
+            if (hill[i] == NULL) errx(1, "calloc failed");
     }
     return hill;
 }
@@ -106,7 +100,7 @@ unsigned long ride_snowy_hill(int **arr, int file_len, int right, int down)
 
 int main(int argc, char **argv)
 {
-	if (argc != 2) errmsg("usage: toboggan <input-file>");
+	if (argc != 2) errx(1, "usage: toboggan <input-file>");
 
 	char *file = argv[1];
     
