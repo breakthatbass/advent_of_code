@@ -7,10 +7,7 @@
 int adapters[MAX];
 
 // for use with qsort
-int cmpfunc (const void * a, const void * b) 
-{
-	return (*(int*)a-*(int*)b);
-}
+int cmpfunc (const void * a, const void * b) {return (*(int*)a-*(int*)b);}
 
 
 // part 1
@@ -42,19 +39,19 @@ long combos(int *a, int len)
 	static long paths[MAX];
 	paths[len-1] = 1;
 
-	for (i=len-2; i >= 0; i-- )
-		for (j = i+1; j < len && adapters[j]-adapters[i] < 4; j++)
+	for (i=len-2; i >= 0; i--)
+		for (j = i+1; j < len && adapters[j]-adapters[i] < 4; j++) 
 			paths[i] += paths[j];
 	return paths[0];
 }
+
 
 int main()
 {
 	int i = 0;
 	int len = 1;
-	while (scanf("%d", &adapters[i++]) == 1) {
+	while (scanf("%d", &adapters[i++]) == 1) 
 		len++;
-	}
 
 	qsort(adapters, len, sizeof(int), cmpfunc);
 	
