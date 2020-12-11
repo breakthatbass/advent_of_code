@@ -1,5 +1,4 @@
 #include <stdio.h>
-//#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -54,7 +53,7 @@ int main(int argc, char **argv)
 {
 	int i, j, c;
 
-	i = 0;  //width = 0; height = 0;
+	i = 0;
 	while ((c = fgetc(stdin)) != EOF) {
 		if (c == '\n') {
 			width = i;
