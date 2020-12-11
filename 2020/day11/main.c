@@ -24,22 +24,9 @@ int look(int j, int i)
 	return count;
 }
 
-
-int main(int argc, char **argv)
+int visualize()
 {
-	int i, j, c;
-
-	i = 0;  //width = 0; height = 0;
-	while ((c = fgetc(stdin)) != EOF) {
-		if (c == '\n') {
-			width = i;
-			height++;
-			i = 0;
-		}
-		else seats[height][i++] = c;
-	}
-
-
+	int i, j;
 	while (1) {
 		memcpy(next, seats, sizeof(char)*SIZE*SIZE);
 		int neighbors;
@@ -59,8 +46,25 @@ int main(int argc, char **argv)
 	for (i = 0; i < height; i++) 
 		for (j = 0; j < width; j++)
 			if (seats[i][j] == '#') count++;
-	
-	
-	printf("part 1: %d seats taken\n", count); // should be 2254
+	return count;
+}
+
+
+int main(int argc, char **argv)
+{
+	int i, j, c;
+
+	i = 0;  //width = 0; height = 0;
+	while ((c = fgetc(stdin)) != EOF) {
+		if (c == '\n') {
+			width = i;
+			height++;
+			i = 0;
+		}
+		else seats[height][i++] = c;
+	}
+
+	int taken = visualize();	
+	printf("part 1: %d seats taken\n", taken);
 	return 0;
 }
