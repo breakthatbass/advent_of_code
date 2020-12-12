@@ -6,32 +6,48 @@ int main()
 {
     char action;
     int units;
-    char directions[4] = {'N', 'E', 'S', 'W'};
 
-    int x = 0;      // east/west moves
-    int y = 0;      // north/south moves
-    int dir = 1;    // start facing east
+    int x = 0;
+    int y = 0;
+    int wx = 10;
+    int wy = -1;
+    int turn, tmp, i;
 
     while (scanf("%c%d\n", &action ,&units) == 2) {
-        if (action == 'F') action = directions[dir];
         switch(action) {
+            case 'F':
+                x += wx * units;
+                y += wy * units;
+                break;
             case 'N':
-                y -= units;
+                wy -= units;
                 break;
             case 'S':
-                y += units;
+                wy += units;
                 break;
             case 'E':
-                x += units;
+                wx += units;
                 break;
             case 'W':
-                x -= units;
+                wx -= units;
                 break;
             case 'L':
-                dir = (dir + 4 - units / 90) % 4;
+                i = 0;
+                turn = units/90;
+                while (i++ < turn) {
+                    tmp = wx;
+                    wx = wy;
+                    wy = -tmp;
+                }
                 break;
             case 'R':
-                dir = (dir + units / 90) % 4;
+                i = 0;
+                turn = units/90;
+                while (i++ < turn) {
+                    tmp = wx;
+                    wx = -wy;
+                    wy = tmp;
+                }
                 break;
             default:
                 fprintf(stderr, "something broke!\n");
@@ -40,6 +56,6 @@ int main()
     }
 
     int total = abs(x)+abs(y);
-    printf("part 1: %d\n", total);
+    printf("part 2: %d\n", total);
     return 0;
 }
