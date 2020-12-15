@@ -1,13 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-#define SIZE 2020
+#define P1 2020
+#define P2 30000000
 
-long get2020(long *a, int turn)
+long get_last(long *a, int turn, long lim)
 {
     int i;
     long prev;
-    while (turn < SIZE) {
+    while (turn < lim) {
         prev = a[turn-1];                  
         for (i = turn-2; i >= 0; i--) {
             if (prev == a[i]) {
@@ -20,19 +20,21 @@ long get2020(long *a, int turn)
         if (i < 0) a[turn] = 0;
         turn++;
     }
-    return a[SIZE-1];
+    return a[lim-1];
 }
 
 int main()
 {
     int turn = 0;
-    long nums[SIZE];
-
+    int i = 0;
+    static long nums[P2];
+    
     while(scanf("%ld,", &nums[i++]) > 0) {
         turn++;
     }
 
-    printf("part 1: %ld\n", get2020(nums, turn));
+    printf("part 1: %ld\n", get_last(nums, turn, P1));
+    printf("part 2: %ld\n", get_last(nums, turn, P2));
         
     return 0;
 }
