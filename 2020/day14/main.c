@@ -4,62 +4,56 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define NBITS 36
+#define NBITS 37
 #define MAXLINE 1000
-#define MEMSIZE 999000000
-
-
+#define MEMSIZE 70000
 
 struct mem {
     uint64_t loc;
-    uint64_t value;
-} mem;
+    uint64_t val;
+}; typedef struct mem mem;
 
-mem *memory = (mem*)calloc(MEMSIZE, sizeof(mem));
 
+// load_struct: parse string to get memory location and its value
+mem load_struct(char *line)
+{
+    mem m;
+    sscanf(line, "mem[%llu] = %llu", &m.loc, &m.val);
+    return m;
+}
 
 int main()
 {
-    char mask[NBITS+1];
-    uint64_t mem_val;
+    uint64_t *memory = calloc(MEMSIZE, sizeof(uint64_t));
+    char mask[NBITS];
     char buf[MAXLINE];
     int total = 0;
-    int i = 0;
 
-    int l = 0;
-
-    int c, p;
+    int c;
+    int i, p = 0;
     while ((c = fgetc(stdin)) != EOF) {
         if (c == '\n') {
             if (strstr(buf, "mask")) {
                 // move pointer ahead to the value of mask
                 memmove(buf, buf+7, strlen(buf));
                 strcpy(mask, buf);
-                //printf("%s\n", mask);
             }
             else if (strstr(buf, "mem")) {
-                p = 0;
-                while (buf[p++] != '=');
-                // move the pointer ahead to value of mem
-                memmove(buf, buf+p+1, strlen(buf));
-                mem_val = atoi(buf);
-                if (mem_val > l) l = mem_val;
-                printf("MEM VALUE: %llu\n", mem_val);
-                printf("BINARY: ");
-                convert(mem_val);
-
+                mem m = load_struct(buf);
+                memory[m.loc] = m.val;
             }
             i = 0;
             memset(buf, 0, MAXLINE);
-
         } else buf[i++] = c;
     }
 
-    // get mask
-    // convert mem value to binary
-    // OR the mask to the binary value
-    // covert back to decimal
-    // add that decimal mem value to total
-    printf("LARGEST: %d\n", l);
+
+    for (uint64_t j = 0; j < MEMSIZE; j++) {
+        //if (memory[j] != 0) 
+        //printf("%llu: %llu\n", j, memory[j]);
+    }
+    free(memory);
+
+
     return 0;
 }
