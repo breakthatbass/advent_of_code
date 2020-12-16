@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
+#include <stdlib.h>
 
 #define SIZE 120
 
@@ -27,6 +27,7 @@ int visualize()
 {
 	int i, j;
 	while (1) {
+
 		memcpy(next, seats, sizeof(char)*SIZE*SIZE);
 		int neighbors;
 		for (i = 0; i < height; i++) {
@@ -39,7 +40,6 @@ int visualize()
 		if (memcmp(seats, next, sizeof(char)*SIZE*SIZE) == 0) break;
 		memcpy(seats, next, sizeof(char)*SIZE*SIZE);
 	}
-
 	// count up all occupied seats
 	int count = 0;
 	for (i = 0; i < height; i++) 
