@@ -26,7 +26,7 @@ rule *rules[RULES];
 void get_rules(char *s)
 {
 	rule *r = malloc(sizeof(rule));
-	// parse the string
+
 	char *name = malloc(sizeof(char)*40);
 	strcpy(name, strtok(s, ":"));
 
@@ -68,7 +68,6 @@ void get_nums(char *s)
 {
 	const char *tok;
 	for (tok = strtok(s, ","); tok&&*tok; tok = strtok(NULL, ",")) {
-		//printf("\t%d\n", atoi(tok));
 		test_num(atoi(tok));
 	}
 }
@@ -84,25 +83,13 @@ int main()
 		memset(buf, 0, MAXLINE);
 	}
 
-	/* print
-	for (int i = 0; i < pos; i++)
-		printf("%s: %d-%d, %d-%d\n", rules[i]->name, rules[i]->ranges[0].low, rules[i]->ranges[0].high, rules[i]->ranges[1].low, rules[i]->ranges[1].high);
-	*/
-
-	// ignore your ticket for now
-	// read from each line of numbers
-
 	line = 0;
-	// continue; while line < 26 (26 is where nums start)
 	while (fgets(buf, MAXLINE, stdin)) {
 		if (line++ < 3) continue; // move pointer ahead to numbers
-		//printf("%s\n", buf);
-		
 		get_nums(buf);
 		memset(buf, 0, MAXLINE);
 	}
 
 	printf("part 1: %ld\n", total); // 707627 too high 2352859
-	// return total
 	return 0;
 }
