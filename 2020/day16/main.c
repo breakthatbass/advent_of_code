@@ -6,6 +6,8 @@
 #define RULES 22
 #define MAXLINE 150
 
+long total = 0;	// variable for part 1 answer
+
 typedef struct range {
 	int low;
 	int high;
@@ -23,9 +25,11 @@ rule *rules[RULES];
 
 void get_rules(char *s)
 {
-	rule *r;
+	rule *r = malloc(sizeof(rule));
 	// parse the string
-	char *name = strtok(s, ":");
+	char *name = malloc(sizeof(char)*40);
+	strcpy(name, strtok(s, ":"));
+
 	int low1 = atoi(strtok(NULL, "-"));
 	int high1 = atoi(strtok(NULL, " "));
 	char *l2 = strtok(NULL, "-");
@@ -45,6 +49,30 @@ void get_rules(char *s)
 }
 
 
+void test_num(int n)
+{
+	int i;
+	for (i = 0; i < pos; i++) {
+		if ((n >= rules[i]->ranges[0].low && 
+			n <= rules[i]->ranges[0].high) ||
+			(n >= rules[i]->ranges[1].low && 
+			n <= rules[i]->ranges[1].high)) {
+				return;
+			}
+	}
+	total += n;
+}
+
+// parse the number line string into individual numbers
+void get_nums(char *s)
+{
+	const char *tok;
+	for (tok = strtok(s, ","); tok&&*tok; tok = strtok(NULL, ",")) {
+		//printf("\t%d\n", atoi(tok));
+		test_num(atoi(tok));
+	}
+}
+
 int main()
 {
 	char buf[MAXLINE];
@@ -56,8 +84,25 @@ int main()
 		memset(buf, 0, MAXLINE);
 	}
 
-	// seg fault
-	printf("%s: ", rules[0]->name);
+	/* print
+	for (int i = 0; i < pos; i++)
+		printf("%s: %d-%d, %d-%d\n", rules[i]->name, rules[i]->ranges[0].low, rules[i]->ranges[0].high, rules[i]->ranges[1].low, rules[i]->ranges[1].high);
+	*/
 
+	// ignore your ticket for now
+	// read from each line of numbers
+
+	line = 0;
+	// continue; while line < 26 (26 is where nums start)
+	while (fgets(buf, MAXLINE, stdin)) {
+		if (line++ < 3) continue; // move pointer ahead to numbers
+		//printf("%s\n", buf);
+		
+		get_nums(buf);
+		memset(buf, 0, MAXLINE);
+	}
+
+	printf("part 1: %ld\n", total); // 707627 too high 2352859
+	// return total
 	return 0;
 }
