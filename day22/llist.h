@@ -8,10 +8,6 @@ typedef struct node {
     struct node *next;
 } node_t;
 
-typedef struct list {
-    node_t *head;
-} list;
-
 
 /*** PROTOTYPES ***/
 
