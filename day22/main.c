@@ -5,50 +5,57 @@
 
 #include "llist.h"
 
-// globals for length of each list
-int p1_len = 0;
-int p2_len = 0;
-
 #define MAXLINE 16
 #define P1  0
 #define P2  1
 
+// linked lists for each hand
+node_t *player_1 = NULL;
+node_t *player_2 = NULL;
+// globals for length of each list
+int p1_len = 0;
+int p2_len = 0;
 
-
-void play_cards(node_t *l1, node_t *l2)
+int add_cards(node_t *winner, int len)
 {
-    int p1_hand, p2_hand;
-    int i = 0;
-    while (p1_len > 0 && p2_len > 0) {
+    int total = 0;
+    int n;
+    node_t *tmp = winner;
+    while (tmp != NULL)
+    {
+        total += tmp->value * len--;
+        tmp = tmp->next;
+    }
+    return total;
+}
 
+void play_cards()
+{
+    unsigned int p1_hand, p2_hand;
+    while (p1_len > 0 && p2_len > 0) {
         // pull top cards of each hand reduce handsize
-        p1_hand = pull(&l1);  p1_len--;
-        p2_hand = pull(&l2);  p1_len--;
+        p1_hand = pull(&player_1);  p1_len--;
+        p2_hand = pull(&player_2);  p2_len--;
 
         if (p1_hand > p2_hand) {
-            append(&l1, p1_hand); 
-            append(&l1, p2_hand);
+            append(&player_1, p1_hand); 
+            append(&player_1, p2_hand);
             // add length to winner's hand
             p1_len+=2;
         } else {
-            append(&l2, p2_hand);
-            append(&l2, p1_hand);
+            append(&player_2, p2_hand);
+            append(&player_2, p1_hand);
             p2_len+=2;
         }
     }
-    printf("player 1: %d cards\n", p1_len);
-    printlist(l1);
-    printf("player 2: %d cards\n", p2_len);
-    printlist(l2);
 }
+
+
 
 int main()
 {
     int current_player = P1;
     char num[MAXLINE];
-
-    node_t *player_1 = NULL;
-    node_t *player_2 = NULL;
 
     // get each hand into its own linked list
     while(fgets(num, MAXLINE, stdin)) {
@@ -71,9 +78,15 @@ int main()
     }
 
     // play cards!
-    play_cards(player_1, player_2);
+    play_cards();
 
-    
+    int total = 0;
+    if (p1_len > 0)
+        total = add_cards(player_1, p1_len);
+    else total = add_cards(player_2, p2_len);
+
+    printf("p1: %d\n", total);
+
 
     return 0;
 }
