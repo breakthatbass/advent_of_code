@@ -40,13 +40,13 @@ void append(node_t **head, int value)
 int pull(node_t **head)
 {
     int n;  // return value
+
     if (head == NULL) return -1;
     else {
         node_t *tmp = *head;
         n = tmp->value;
         *head = tmp->next;
         free(tmp);
-        tmp = 0;
     }
     return n;
 }
