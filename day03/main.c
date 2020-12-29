@@ -12,9 +12,7 @@ char hill[MAXLEN][MAXLINE];
 int check_spot(int x, int y)
 {
 	int n = y % 31;
-	if (hill[x][n] == '#') {
-		return 1;
-	}
+	if (hill[x][n] == '#') return 1;
 	return 0;
 }
 
