@@ -6,7 +6,6 @@
 #define MAXLINE 500
 char fields[][4] = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"};    
 
-
 // get_val: extract the value from desired field
 char *get_val(char *passport, char *field)
 {
