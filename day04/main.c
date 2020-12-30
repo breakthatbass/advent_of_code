@@ -29,10 +29,8 @@ char *get_val(char *passport, char *field)
 // check_passport: verify if contains required fields
 int check_passport(char *passport)
 {
-	for (int i = 0; i < 7; i++) {
-		if (strstr(passport, fields[i]) == NULL)
-			return 0;
-	}
+	for (int i = 0; i < 7; i++) 
+		if (strstr(passport, fields[i]) == NULL) return 0;
 	return 1;
 }
 
