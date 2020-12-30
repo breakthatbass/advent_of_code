@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-#define MAXLINE 10
 #define LEN 200
 
 
