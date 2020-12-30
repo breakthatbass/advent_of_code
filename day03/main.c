@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define MAXLINE 35
 #define MAXLEN 323	// input is 323 lines long
@@ -9,13 +7,8 @@ int len = 0;	// variable for file length
 char hill[MAXLEN][MAXLINE];
 
 
-int check_spot(int x, int y)
-{
-	int n = y % 31;
-	if (hill[x][n] == '#') return 1;
-	return 0;
-}
-
+/*	ride the toboggan down the hill and hit some trees!
+ *	...and count them while you're at it. */
 unsigned long ride_snowy_hill(int right, int down)
 {
 	int x = 0; 
@@ -23,13 +16,12 @@ unsigned long ride_snowy_hill(int right, int down)
 	unsigned long tree_count = 0;
 
 	while (x < len)	{
-		if (check_spot(x, y)) tree_count++;
+		if (hill[x][y % 31] == '#') tree_count++;
 		y+=right;
 		x+=down;
 	}
 	return tree_count;
 }
-
 
 
 int main()
