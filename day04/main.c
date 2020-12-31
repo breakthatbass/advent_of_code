@@ -15,6 +15,10 @@ char *get_val(char *passport, char *field)
 	
 	// copy passport as to not mutilate original
 	char *cpy = malloc(sizeof(char)*strlen(passport)+1);
+	if (cpy == NULL) {
+		fprintf(stderr, "malloc failed\n");
+		exit(1);
+	}
 	strcpy(cpy, passport);
 	if ((s = strstr(cpy, field))) {
 		cs = strstr(s, ":");
