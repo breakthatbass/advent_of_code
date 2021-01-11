@@ -2,162 +2,95 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXLINE 20
-#define ROW 8
-#define COL 4
+#define ROWLEN 7
+#define COLLEN 3
+#define TKTLEN 1024
 
-// for use with qsort()
+// qsort
 int cmpfunc (const void * a, const void * b) {return ( *(int*)a - *(int*)b );}
 
-// count_lines: get number of lines and length of each line from a file
-int count_lines(char *file)
+// binary to decmimal converter
+uint64_t btod(char *bin)
 {
-    FILE *fp;
-	char c;
-	int count = 0;
-    int line = 0;
+	uint64_t n = 0;	// decimal to return
+	uint64_t base = 1;
 
-    fp = fopen(file, "r");
-    if (fp == NULL) {
-        fprintf(stderr, "cannot open file\n");
-        exit(1);
-    }
+	size_t len = strlen(bin)-1;
 
-	while ((c = getc(fp)) && c != EOF) {
-		if (c == '\n')
-			count++;
+	int i;
+	for (i = len; i >= 0; i--) {
+		if (bin[i] == '1') n += base;
+		base = base << 1;
 	}
-    fclose(fp);
-	return count;
+	return n;
 }
 
 
-// get row chars
-char *get_row(char *tkt)
+// look through ticket array to find my ticket
+int get_my_tkt(uint64_t *a, int len)
 {
-    char *row = (char*)malloc(sizeof(char)*ROW);
-    if (row == NULL) {
-        fprintf(stderr, "mem problems\n");
-        exit(1);
-    }
-    strncpy(row, tkt, 7);
-    return row;
-}
+    qsort(a, len, sizeof(uint64_t), cmpfunc);
 
-
-// compute row into the number
-int comrow(char *s)
-{
-    int b_up = 127;  
-    int b_low = 0;    
-    int i;
-    size_t len = strlen(s);
-    for (i = 0; i < len; i++){
-        if (s[i] == 'F') b_up = (b_up + b_low)/2;   
-        else b_low = (b_up + b_low+1)/2;
-    }
-    return b_low;
-}
-
-
-// compute column into the number
-int comcol(char *s)
-{
-    int c_up = 7;
-    int c_low = 0;
-    int i;
-    size_t len = strlen(s);
-    for (i = 0; i < len; i++) {
-        if (s[i] == 'L') c_up = (c_up+c_low)/2;
-        else c_low = (c_up+c_low+1)/2;
-    }
-    return c_low;
-}
-
-
-// get column chars
-char *get_col(char *tkt)
-{
-    char *col = (char*)malloc(sizeof(char)*COL);
-    if (col == NULL) {
-        fprintf(stderr, "mem problems\n");
-        exit(1);
-    }
-    col = strtok(&tkt[7], "\n");
-    return col;
-}
-
-// part 2, sort array of tickets, get the missing one
-int get_tkt(int *a, int len)
-{
-    int i;
-    qsort(a, len, sizeof(int), cmpfunc);
-    for (i = 0; i < len; i++) {
-        if (a[i] == (a[i+1]-1))
+    while (*a++) {
+        if (*a == *(a+1)-1)
             continue;
-        else return a[i]+1;
+        else return *a+1;
     }
     return 0; // problemz
 }
 
 
-// return the ID of a ticket
-int get_id(int row, int col)
+int main()
 {
-    return row * 8 + col;
-}
-
-
-int main(int argc, char **argv)
-{
-    char buffer[MAXLINE];
-    
-    if (argc != 2) {
-		fprintf(stderr, "usage: ./a.out <input-file>\n");
-		exit(1);
-	}
-
-	char *file = argv[1];
-
-    FILE *fp = fopen(file, "r");
-    if (fp == NULL) {
-        fprintf(stderr, "cannot open file\n");
-        exit(1);
-    }
-
-    int file_len = count_lines(file);
-    int *ids = (int*)malloc(sizeof(int)*file_len);
-
-    int big_id = 0;
     int c;
-    int n;
-    int i = 0;
-    int j = 0;
-    while ((c = fgetc(fp)) != EOF) {
-        if (c == '\n') {
-            
-            // get chars for col and rows, then get their numbers
-            char *row = get_row(buffer);
-            char *col = get_col(buffer);
-            int x = comrow(row);
-            int y = comcol(col);
-            
-            // get id
-            n = get_id(x, y);
-            // if current ID is larger, replace it
-            if (n > big_id) big_id = n;
-            ids[j++] = n; // add id to array
-
-            // flush out buffer
-			memset(buffer, 0, MAXLINE);
-			i = 0;
-        } else buffer[i++] = (char)c;
-    }
-    fclose(fp);
-
-    printf("Biggest ID: %d\n", big_id);
-    int my_seat = get_tkt(ids, file_len);
-    printf("my seat: %d\n", my_seat);
+    // array for all the tickets
+    uint64_t *tkts = malloc(sizeof(uint64_t)*TKTLEN);
+    int tkt_count = 0;
     
+    uint64_t h_pass = 0; // keep track of largest number
+    // the F and B chars
+    char *rows = malloc(sizeof(char)*ROWLEN);
+    // the L and R chars
+    char *col = malloc(sizeof(char)*COLLEN);
+
+    while ((c = fgetc(stdin)) != EOF) {
+        switch(c) {
+        case '\n':
+            rows -= ROWLEN;
+            col -= COLLEN;
+            //convert to dec
+            uint64_t row_dec = btod(rows);
+            uint64_t col_dec = btod(col);
+            uint64_t total = row_dec * 8 + col_dec;
+            *tkts++ = total; tkt_count++;
+            if (total > h_pass) h_pass = total;
+            break;
+        case 'F':
+            *rows++ = '0';
+            break;
+        case 'B':
+            *rows++ = '1';
+            break;
+        case 'L':
+            *col++ = '0';
+            break;
+        case 'R':
+            *col++ = '1';
+            break;
+        default:
+            break;
+        }
+    }
+    // pointer back to start
+    tkts -= tkt_count;
+    int my_seat = get_my_tkt(tkts, tkt_count);
+
+    printf("part 1: %llu\n", h_pass);
+    printf("part 2: %d\n", my_seat);
+
+    free(rows);
+    free(col);
+    free(tkts);
+
     return 0;
 }
