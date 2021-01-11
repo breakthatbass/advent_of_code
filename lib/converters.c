@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "helpers.h"
 #include "converters.h"
 
 // binary to decmimal converter
@@ -67,4 +66,34 @@ char *pad_bin(char *bin)
 	// get pointer back to the beginning
 	rbin -= plen - 1;
 	return rbin;
+}
+
+ // reverse string s in place
+ void reverse(char *s)
+ {
+     int i, j;
+     char c;
+
+     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+		 c = *(s+i);
+		 *(s+i) = *(s+j);
+		 *(s+j) = c;
+     }
+}
+
+// convert an int to a string
+void itoa(int n, char *s)
+{
+	int i, sign;
+
+	// record sign, make positive
+	if ((sign = n) < 0) n = -n;
+
+	i = 0;
+	do {	// generate digits in reverse order
+		s[i++] = n % 10 + '0'; // get next digit
+	} while ((n /= 10) > 0);   // delete it
+
+	if (sign < 0) s[i++] = '-';
+	s[i] = '\0';
 }

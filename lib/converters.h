@@ -13,4 +13,10 @@ char *dtob(uint64_t n);
 // pad binary number with proper amount of zeros
 char *pad_bin(char *bin);
 
+// reverse string s in place
+void reverse(char *s);
+ 
+ // convert an int to a string
+void itoa(int n, char *s);
+
 #endif
