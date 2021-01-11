@@ -6,6 +6,8 @@
 #define COLLEN 3
 #define TKTLEN 1024
 
+static int tkt_count = 0;
+
 // qsort
 int cmpfunc (const void * a, const void * b) {return ( *(int*)a - *(int*)b );}
 
@@ -45,13 +47,10 @@ int main()
     int c;
     // array for all the tickets
     uint64_t *tkts = malloc(sizeof(uint64_t)*TKTLEN);
-    int tkt_count = 0;
+    char *rows = malloc(sizeof(char)*ROWLEN); // F & B chars
+    char *col = malloc(sizeof(char)*COLLEN);  // L & R chars
     
     uint64_t h_pass = 0; // keep track of largest number
-    // the F and B chars
-    char *rows = malloc(sizeof(char)*ROWLEN);
-    // the L and R chars
-    char *col = malloc(sizeof(char)*COLLEN);
 
     while ((c = fgetc(stdin)) != EOF) {
         switch(c) {
