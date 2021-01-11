@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../lib/converters.h"
+
 #define ROWLEN 7
 #define COLLEN 3
 #define TKTLEN 1024
@@ -10,23 +12,6 @@ static int tkt_count = 0;
 
 // qsort
 int cmpfunc (const void * a, const void * b) {return ( *(int*)a - *(int*)b );}
-
-// binary to decmimal converter
-uint64_t btod(char *bin)
-{
-	uint64_t n = 0;	// decimal to return
-	uint64_t base = 1;
-
-	size_t len = strlen(bin)-1;
-
-	int i;
-	for (i = len; i >= 0; i--) {
-		if (bin[i] == '1') n += base;
-		base = base << 1;
-	}
-	return n;
-}
-
 
 // look through ticket array to find my ticket
 int get_my_tkt(uint64_t *a, int len)
