@@ -3,23 +3,22 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "llist.h"
+#include "../lib/llist.h"
 
 #define MAXLINE 16
 #define P1  0
 #define P2  1
 
 // linked lists for each hand
-node_t *player_1 = NULL;
-node_t *player_2 = NULL;
+static node_t *player_1 = NULL;
+static node_t *player_2 = NULL;
 // globals for length of each list
-int p1_len = 0;
-int p2_len = 0;
+static int p1_len = 0;
+static int p2_len = 0;
 
 int add_cards(node_t *winner, int len)
 {
     int total = 0;
-    int n;
     node_t *tmp = winner;
     while (tmp != NULL)
     {

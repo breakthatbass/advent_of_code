@@ -27,6 +27,12 @@ char *dtob(uint64_t n)
 	static char bin[MAXBIN];
 	int i;
 
+	if (n == 0) {
+		bin[0] = '0';
+		bin[1] = '\0';
+		return bin;
+	}
+
 	for (i = 0; n > 0; i++) {
 		// convert to string and plug into b array
 		itoa((n % 2), &bin[i]);
@@ -43,10 +49,10 @@ char *pad_bin(char *bin)
 	char *rbin;  // the binary string we will return
 	size_t len = strlen(bin);
 
-    if (len == 32) return bin;
+    if (len == 36) return bin;
 	
 	// get the number of zeros needed
-    int p = 33 - len-1;
+    int p = 36 - len;
 	
 	int plen = p+len+1;
 	rbin = malloc(sizeof(char)*plen);
