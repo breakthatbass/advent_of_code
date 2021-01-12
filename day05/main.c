@@ -34,6 +34,10 @@ int main()
     uint64_t *tkts = malloc(sizeof(uint64_t)*TKTLEN);
     char *rows = malloc(sizeof(char)*ROWLEN); // F & B chars
     char *col = malloc(sizeof(char)*COLLEN);  // L & R chars
+    if (tkts == NULL || rows == NULL || col == NULL) {
+        fprintf(stderr, "memory problemz\n");
+        exit(EXIT_FAILURE);
+    }
     
     uint64_t h_pass = 0; // keep track of largest number
 
