@@ -94,13 +94,3 @@ int main()
     printf("PART 1: %llu\n", total);
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
