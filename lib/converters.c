@@ -44,10 +44,8 @@ char *pad_bin(char *bin)
 	size_t len = strlen(bin);
 
     if (len == 32) return bin;
-	// figure out how many zeros to pad
-	//int p = 4 - len % 4;
-	//if (p == 4 || p == 0) return bin; // none nedded
-
+	
+	// get the number of zeros needed
     int p = 33 - len-1;
 	
 	int plen = p+len+1;
