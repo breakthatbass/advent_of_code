@@ -3,8 +3,8 @@
 #define MAXLINE 35
 #define MAXLEN 323	// input is 323 lines long
 
-int len = 0;	// variable for file length
-char hill[MAXLEN][MAXLINE];
+static int len = 0;	// variable for file length
+static char hill[MAXLEN][MAXLINE];
 
 
 /*	ride the toboggan down the hill and hit some trees!
