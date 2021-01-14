@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <assert.h>
 
-#include "../lib/array.h" // split, 
+#include "../lib/array.h" // split
 
 #define MAXCHAR 28
 #define MAXLINE 1024
@@ -30,6 +30,7 @@ void find(char c)
 int all_yes(char *buf)
 {
 	int total = 0;
+	// split: break up string into array of strings based on delimiter
 	char **s = split(buf, "\n");
 	char *ref = malloc(sizeof(char) * strlen(*s)+1);
 	assert(s);
@@ -48,7 +49,7 @@ int all_yes(char *buf)
 	int ref_len = 0;
 	while (*s) {
 		while (*ref) {
-			// replace any char in ref that is not in other strings
+			// X any char in ref that is not in other strings
 			if (strchr(*s, *ref) == NULL) {
 				*ref = 'X';
 			}
@@ -67,7 +68,9 @@ int all_yes(char *buf)
 		}
 		ref++;
 	}
-	printf(" -> %d\n", total);
+
+	if (total > 0) // don't print blanks
+		printf(" -> %d\n", total);
 	return total;
 }
 
