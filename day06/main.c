@@ -2,16 +2,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <assert.h>
+
+#include "../lib/array.h" // split, 
 
 #define MAXCHAR 28
+#define MAXLINE 1024
 
 
-// store each groups answers
+// store each groups answers for part 1
 static char answers[MAXCHAR];
 static int len = 0;
 
 
-// search for c in answers, add if not present
+// search for c in answers, add if not present (part 1)
 void find(char c)
 {
 	if (!isalpha(c)) return;
@@ -21,25 +25,87 @@ void find(char c)
 }
 
 
-int main(int argc, char **argv)
+
+// find chars where all people answered yes (part 2)
+int all_yes(char *buf)
 {
-	int c, prev;
 	int total = 0;
+	char **s = split(buf, "\n");
+	char *ref = malloc(sizeof(char) * strlen(*s)+1);
+	assert(s);
+	assert(ref);
+
+	// copy over first string to use as a reference
+	strcpy(ref, *s);
+
+	// take care of the one liners
+	if (*++s == NULL) {
+		printf("%s -> ", *--s);
+		printf("%zu\n", strlen(*s));
+		return strlen(*s);
+	}
+
+	int ref_len = 0;
+	while (*s) {
+		while (*ref) {
+			// replace any char in ref that is not in other strings
+			if (strchr(*s, *ref) == NULL) {
+				*ref = 'X';
+			}
+			ref++;
+			ref_len++;
+		}
+		s++;
+	}
+	// bring pointer back
+	ref -= ref_len;
+	// count all remaining chars in ref
+	while(*ref) {
+		if (*ref != 'X') {
+			printf("%c", *ref);
+			total++;
+		}
+		ref++;
+	}
+	printf(" -> %d\n", total);
+	return total;
+}
+
+
+
+int main()
+{
+	int c, prev, i;
+	char buf[MAXLINE];
+
+	int part1 = 0;
+	int part2 = 0;
 	
 	while ((c = fgetc(stdin))) {
 		if (feof(stdin)) {
+			// last group
+			buf[i-1] = '\0'; // null terminate the string
 			find(c);
-			total += len;
+			part1 += len;
+			part2 += all_yes(buf);
 			break;
 		}
 		if (c == '\n' && prev == '\n') {
-			total += len;
+			// we got us a group
+			buf[i-1] = '\0'; // null terminate the string
+			part1 += len;
+			part2 += all_yes(buf);
 			len = 0;
+			i = 0;
+			
 			memset(answers, 0, MAXCHAR);
+			memset(buf, 0, MAXLINE);
 		}
 		find(c);
 		prev = c;
+		buf[i++] = c;
 	}
-	printf("part 1: %d\n", total);
+	printf("part 1: %d\n", part1);
+	printf("part 2: %d\n", part2);  // 2903 low, 3558, 4222, 3312
 	return 0;
 }
