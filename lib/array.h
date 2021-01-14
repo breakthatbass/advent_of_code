@@ -11,4 +11,7 @@ char **split(char *s, const char *delim);
 // print each string in an array of strings
 void print_vec(char **vec);
 
+// get length of an array of strings
+int length(char **vec);
+
 #endif

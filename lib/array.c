@@ -7,42 +7,36 @@
 char **split(char *s, const char *delim)
 {
     char **split_s;
-    char *token, *string, *tofree;
-    size_t len;
-    int i, l;
+    char *token;
+    size_t len, s_len;
+    int i;
     
     len = strlen(s);
     
-    split_s = malloc(sizeof(char)*len*2);
+    split_s = malloc(sizeof(char*)*(len)*2);
     if (split_s == NULL) {
         fprintf(stderr, "split: could not allocate memory\n");
         exit(EXIT_FAILURE);
     }
 
-    tofree = string = strdup(s);
-
     i = 0;
-    while ((token = strsep(&string, delim)) != NULL) {
+    token = strtok(s, delim);
+    while (token != NULL) {
         *split_s = token;
-        i++;
+        if (**split_s == ' ' || **split_s == '\n')
+            memmove(*split_s, *(split_s)+1, strlen(*split_s));
+
+        // add null terminator at end of each string
+        s_len = strlen(*split_s);
+        split_s+=s_len;
+        *split_s = 0;
+        split_s -= s_len;
+
+        token = strtok(NULL, delim);
         split_s++;
+        i++;
     }
-    // bring pointer back
+    *split_s = NULL;
     split_s -= i;
-    l = i;
-
-    free(tofree);
     return split_s;
-}
-
-// print each string in an array of strings
-void print_vec(char **vec)
-{
-    int len = 0;
-    while (*vec) {
-        printf("%s\n", *vec);
-        len++;
-        vec++;
-    }
-    vec -= len;
 }
