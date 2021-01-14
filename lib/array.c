@@ -38,7 +38,7 @@ char **split(char *s, const char *delim)
 // print each string in an array of strings
 void print_vec(char **vec)
 {
-    int i, len = 0;
+    int len = 0;
     while (*vec) {
         printf("%s\n", *vec);
         len++;
