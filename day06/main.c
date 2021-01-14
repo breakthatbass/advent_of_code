@@ -109,6 +109,6 @@ int main()
 		buf[i++] = c;
 	}
 	printf("part 1: %d\n", part1);
-	printf("part 2: %d\n", part2);  // 2903 low, 3558, 4222, 3312
+	printf("part 2: %d\n", part2);  // not 2903 (way too low), 3558, 4222, or 3312
 	return 0;
 }
