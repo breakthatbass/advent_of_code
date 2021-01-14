@@ -9,7 +9,6 @@
 #define MAXCHAR 28
 #define MAXLINE 1024
 
-
 // store each groups answers for part 1
 static char answers[MAXCHAR];
 static int len = 0;
@@ -23,7 +22,6 @@ void find(char c)
 	if (strchr(answers, c) == NULL) 
 		answers[len++] = c;
 }
-
 
 
 // find chars where all people answered yes (part 2)
@@ -48,28 +46,32 @@ int all_yes(char *buf)
 	}
 	s_els++;
 
-	size_t i;
+	int ref_len = 0;
 	while (*s) {
-		for (i = 0; i < strlen(ref); i++) {
+		
+		ref_len = 0;
+		while (*ref) {
 			// X any char in ref that is not in other strings
-			if (strchr(*s, ref[i]) == NULL) 
-				ref[i] = 'X';
+			if (strchr(*s, *ref) == NULL) 
+				*ref = 'X';
+			ref++;
+			ref_len++;
 		}
+		// reset pointer
+		ref -= ref_len;
 		s++;
 		s_els++;
 	}
-	
-	int ref_len = 0;
 	
 	while(*ref) {
 		if (*ref != 'X') {
 			printf("%c", *ref);
 			total++;
 		}
-		ref_len++;
 		ref++;
 	}
 
+	// bring pointers back and free thier asses
 	ref -= ref_len;
 	s -= s_els;
 	free(s);
@@ -79,7 +81,6 @@ int all_yes(char *buf)
 		printf(" -> %d\n", total);
 	return total;
 }
-
 
 
 int main()
