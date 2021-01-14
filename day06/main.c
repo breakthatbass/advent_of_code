@@ -46,9 +46,8 @@ int all_yes(char *buf)
 	}
 	s_els++;
 
-	int ref_len = 0;
+	int ref_len;
 	while (*s) {
-		
 		ref_len = 0;
 		while (*ref) {
 			// X any char in ref that is not in other strings
