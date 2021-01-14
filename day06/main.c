@@ -30,6 +30,7 @@ void find(char c)
 int all_yes(char *buf)
 {
 	int total = 0;
+	int s_els = 0; // keep track of the # of elements in s to free later
 	// split: break up string into array of strings based on delimiter
 	char **s = split(buf, "\n");
 	char *ref = malloc(sizeof(char) * strlen(*s)+1);
@@ -38,13 +39,14 @@ int all_yes(char *buf)
 
 	// copy over first string to use as a reference
 	strcpy(ref, *s);
-
+	
 	// take care of the one liners
 	if (*++s == NULL) {
 		printf("%s -> ", *--s);
 		printf("%zu\n", strlen(*s));
 		return strlen(*s);
 	}
+	s_els++;
 
 	int ref_len = 0;
 	while (*s) {
@@ -57,6 +59,7 @@ int all_yes(char *buf)
 			ref_len++;
 		}
 		s++;
+		s_els++;
 	}
 	// bring pointer back
 	ref -= ref_len;
@@ -69,6 +72,11 @@ int all_yes(char *buf)
 		ref++;
 	}
 
+	ref -= ref_len;
+	s -= s_els;
+	free(ref);
+	free(s);
+	
 	if (total > 0) // don't print blanks
 		printf(" -> %d\n", total);
 	return total;
