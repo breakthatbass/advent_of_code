@@ -48,34 +48,32 @@ int all_yes(char *buf)
 	}
 	s_els++;
 
-	int ref_len = 0;
+	size_t i;
 	while (*s) {
-		while (*ref) {
+		for (i = 0; i < strlen(ref); i++) {
 			// X any char in ref that is not in other strings
-			if (strchr(*s, *ref) == NULL) {
-				*ref = 'X';
-			}
-			ref++;
-			ref_len++;
+			if (strchr(*s, ref[i]) == NULL) 
+				ref[i] = 'X';
 		}
 		s++;
 		s_els++;
 	}
-	// bring pointer back
-	ref -= ref_len;
-	// count all remaining chars in ref
+	
+	int ref_len = 0;
+	
 	while(*ref) {
 		if (*ref != 'X') {
 			printf("%c", *ref);
 			total++;
 		}
+		ref_len++;
 		ref++;
 	}
 
 	ref -= ref_len;
 	s -= s_els;
-	free(ref);
 	free(s);
+	free(ref);
 	
 	if (total > 0) // don't print blanks
 		printf(" -> %d\n", total);
