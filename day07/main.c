@@ -1,81 +1,131 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <advent.h>
+#include <sys/time.h>
 
-#define MAXLINE 256
+#define MAXLINE 1028
+#define LINES 595
+#define MIL 1000000    // for gettimeofday()
 
-char **bag_list;
-unsigned long bag_list_len = 0;
+/******
+ *	
+ *	read in one line at a time
+ *	process that line
+ *
+ *	PARSE BAG LINE
+ *	void parse_bags(char *s)
+ *	pull this info from line:
+ *		bag: bags it must contain
+ *
+ *
+ *
+ * *******/
 
-struct bag {
-    char *bag_name;
-    char *bag1;
-    char *bag2;
-    char *bag3;
-    char *bag4;
-    struct bag *next;
-}; typedef struct bag bag;
+struct contains {
+	char *bag_name;
+	int count;
+};
+
+/****
+ * bag_t is a structure that contains the bag and an array to
+ * the contains struct which just contains the name and number of each
+ * bag contained in the main bag
+ *
+ * this is just the C way to hold info that might look like this
+ * in a higher-level language:
+ *
+ * {
+ *     "wavy indigo": [
+ *	       {
+ *	           bag_name: "dim teal",
+ *	           count: 3
+ *	       },
+ *	       {
+ *	           bag_name: "shiny gold",
+ *	           count: 2
+ *	       }
+ *     ]
+ * }
+ *
+ * ***********/
+
+typedef struct _bag {
+	char *main_bag;
+	struct contains sub_bags[3];
+} bag_t;
+
+// we store all the bags in here
+//static bag_t all_the_bags[LINES];
 
 
-bag parse_bags(char *buf)
+// parse_bage_line: take a line of input and get a bag and what it
+// contains, then add to the all_the_bags array
+void parse_bag_line(char *line)
 {
-    int i;
-    char *bag_adj, *bag_col, *bag_name, *bufcpy;
+	// get the main bag string
+	char main_bag[25];
+	char s[10], t[10];
+	sscanf(line, "%s %s", s, t);
+	strcpy(main_bag, s);
+	strcat(main_bag, " ");	// get a space between the words
+	strcat(main_bag, t);
 
-    // make copy of buf so we can mutilat the copy not buf
-    bufcpy = malloc(sizeof(char)*strlen(buf));
-    strcpy(bufcpy, buf);
+	// get the sub bags
+	char *ptr = strstr(line, "contain");  // bring the pointer to 'contain'
+	ptr += 8;	// move the pointer ahead to the first sub bag
 
-    buf = strstr(buf, "contain");
-    
-    // parse to get bag_name
-    bag_adj = strtok(bufcpy, " ");
-    bag_col = strtok(NULL, " ");
-    bag_name = malloc(sizeof(char)*(strlen(bag_adj)+strlen(bag_col))+1);
-    strcat(bag_name, bag_adj);
-    strcat(bag_name, " ");
-    strcat(bag_name, bag_col);
+	// quit working if there are no sub bags
+	if (strcmp(ptr, "no other bags.\n") == 0) return;
 
-    // load into struct
-    bag tmp;
-    tmp.bag_name = bag_name;
-    tmp.holds = buf;
+	// get sub bags, if there are any
+	int n;
+	memset(s, 0, 10);
+	memset(t, 0, 10);
+	printf("SUB BAGS:\n");
+	while (sscanf(ptr, "%d %s %s", &n, s, t) == 3) {
+		// clear string variables
+		printf("%d %s %s\n", n, s, t);
+		memset(s, 0, 10);
+		memset(t, 0, 10);
+		
+		ptr  = strstr(ptr, ", ");
+		if (ptr == NULL) {
+			break;
+		} else {
+			ptr += 2;
+			//printf("string : %s", ptr);
+			//break;
+		}
+	}
 
-    return tmp;
+
+	// testing	
+	printf("MAIN BAG:\n%s\n", main_bag);
+	//printf("SECOND PART: %s", ptr);
+	printf("FULL LINE:\n%s\n", line);
 }
 
 
-int main(int argc, char **argv)
+int main(void)
 {
-    arg_check(argc);
-    char *file = argv[1];
-    int len = count_lines(file);
-    FILE *fp = file_ptr(file);   
+	char line_buf[MAXLINE];
+	float ttime;
+	struct timeval start, stop;
+	
+	gettimeofday(&start, NULL);
 
-    char buf[MAXLINE];
+	while (fgets(line_buf, MAXLINE, stdin)) {
+		// printf("%s", line_buf);
+		parse_bag_line(line_buf);
+	}
 
-    bag_list = init_str_arr(len, MAXLINE);
+	gettimeofday(&stop, NULL);
+	ttime = (float)(stop.tv_sec * MIL +
+			stop.tv_usec -
+			start.tv_sec *
+			MIL - start.tv_usec)/MIL;
 
-    int c; 
-    int i = 0;
-    while ((c = fgetc(fp)) != EOF) {
-        if (c == '.') {
-            
-            bag cur = parse_bags(buf);
-            if (strstr(cur.holds, "shiny gold") != NULL) {
-                bag_list[bag_list_len++] = cur.bag_name;
-            }
-            memset(buf, 0, MAXLINE);
-            i=0;
-        } else buf[i++] = c;
-    } 
+	printf("total time (seconds): %f\n", ttime);
 
-
-    for (i = 0; i < bag_list_len; i++) 
-        printf("%s\n", bag_list[i]);
-
-    fclose(fp);
-    return 0;
+	return 0;
 }
-
