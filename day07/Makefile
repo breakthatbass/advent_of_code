@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-g -Wall -Werror -W -Wextra -pedantic -fsanitize=address
-SRC_FILE=main.c
+SRC_FILE=main.c baglist.c
 
 NAME=bags
 
