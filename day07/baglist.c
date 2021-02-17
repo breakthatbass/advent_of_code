@@ -56,3 +56,16 @@ void print_bags(list_t *list)
 		tmp = tmp->next;
 	}
 }
+
+
+// search the list for a bag, return that node
+bag_t *bagsearch(list_t *list, char *bag)
+{
+    bag_t *tmp = list->head;
+    while (tmp) {
+        if (strcmp(tmp->bag_name, bag) == 0)
+            return tmp;
+        tmp = tmp->next;
+    }
+    return NULL;
+}

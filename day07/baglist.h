@@ -34,4 +34,6 @@ void push(list_t *list, char *bag);
 // it prints each main bag and its sub bags
 void print_bags(list_t *list);
 
+bag_t *bagsearch(list_t *list, char *bag);
+
 #endif
