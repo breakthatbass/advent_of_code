@@ -3,7 +3,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "baglist.h"
+#include "lib/baglist.h"
 
 #define MAXLINE 1028
 #define LINES 595
