@@ -63,7 +63,8 @@ int exec_boot_code(struct bootcode *code, int check)
 // reset everything to check loop again
 void reset(void)
 {
-	for (int i = 0; i < len; i++)
+	int i;
+	for (i = 0; i < len; i++)
 		gameboy[i].touched = 0;
 	accumulator = 0;
 }
@@ -87,26 +88,16 @@ void flip(char *instr)
 // keep going until we find the right instruction to flip
 void find_corrupted(struct bootcode *code)
 {
-	int i;
-	char lastin[INSTRUCT];
-	signed int lastval;
-
-	// get last spot in intructions
-	strcpy(lastin, code[len-1].instr);
-	lastval = code[len-1].val;
-
 	// loop throuch each instruction, change it
 	// then see if it makes it to the end
+	int i;
 	for (i = 0; i < len; i++) {
 		reset(); // reset touched to 0
-		
 		// change the instruction
 		flip(code[i].instr);
-	
 		// test it out
 		if (exec_boot_code(code, 1) == 1)
 			break;
-
 		flip(code[i].instr); // change back
 	}
 }
