@@ -16,6 +16,7 @@ struct bootcode gameboy[MAXBOOT];
 static int len = 0; // keep track of length of gameboy array
 static int accumulator = 0;
 
+
 // add instructions into the struct
 struct bootcode *load_code(char *ins, signed int val)
 {
@@ -59,6 +60,7 @@ int exec_boot_code(struct bootcode *code, int check)
 	return 0;
 }
 
+
 // reset everything to check loop again
 void reset(void)
 {
@@ -66,6 +68,7 @@ void reset(void)
 		gameboy[i].touched = 0;
 	accumulator = 0;
 }
+
 
 // change a jmp to nop or a nop to a jmp
 void flip(char *instr)
@@ -79,6 +82,7 @@ void flip(char *instr)
 		strcpy(instr, "jmp");
 	} else return;
 }
+
 
 // flip an instruction then see if it gets stuck in an infinite loop
 // keep going until we find the right instruction to flip
@@ -105,7 +109,6 @@ void find_corrupted(struct bootcode *code)
 			break;
 
 		flip(code[i].instr); // change back
-
 	}
 }
 
