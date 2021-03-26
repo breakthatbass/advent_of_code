@@ -5,35 +5,29 @@
 #define P1 2020
 #define P2 30000000
 
-
 int main()
 {
-    int turn = 0;
-    int prev;
-    int i = 0;
-    static unsigned int seen[P2];
-    
-    while(scanf("%d,", &i) > 0) {
-        seen[prev] = turn;
-        prev = i;
-        turn++;
-    }
-    prev = 
-    while (turn < P2) {
-        prev = a[turn-1];  
-        /*                
-        for (i = turn-2; i >= 0; i--) {
-            if (prev == a[i]) {
-                a[turn] = turn-i-1;
-                break;
-            }
-        }
-        */
-        // not sure why i'm getting massive negative numbers
-        // but this statement seems to fix things
-        if (i < 0) a[turn] = 0;
-        turn++;
-    }
-    printf("part 2: %d\n", i);        
-    return 0;
+	static int numbers[P2];
+	int n;
+	int turns = 0;
+	int prev = 0;
+
+	while (fscanf(stdin, "%d,", &n) == 1) {
+		numbers[prev] = turns;
+		prev = n;
+		turns++;
+	}
+
+	int i;
+	while (turns < P2) {
+		if (numbers[prev])
+			n = turns-numbers[prev];
+		else n = 0;
+		numbers[prev] = turns;
+		if (turns == P1-1) printf("part 1: %d\n", n);
+		prev = n;
+		turns++;
+	}
+	printf("part 2: %d\n", n);
+	return 0;
 }
