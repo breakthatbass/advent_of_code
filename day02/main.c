@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
 struct policy {
 	int low;
@@ -86,6 +87,9 @@ int main(int argc, char **argv)
 		else
 			buffer[i++] = (char)c;
 	}
+
+	assert(valid_sled == 582);
+	assert(valid_toboggan == 729);
 
 	printf("valid sled passwords: %d\n", valid_sled);
 	printf("valid toboggan passwords: %d\n", valid_toboggan);
