@@ -11,7 +11,7 @@ struct policy {
 }; typedef struct policy policy;
 
 
-#define MAXLINE 30
+#define MAXLINE 50
 
 
 // break string into tokens and set them in the struct
@@ -65,27 +65,19 @@ int main(int argc, char **argv)
 
 	int valid_sled = 0;		// keep track of valid sled passwords
 	int valid_toboggan = 0; // keep track of valid toboggan passwords
-	
-	i = 0;
-	while ((c = fgetc(stdin)) != EOF) {
-		if (c == '\n') {
-			buffer[i++] = '\n'; // prevent strtok from reading into next line
-			policy tmp = load_struct(buffer);
-			
-			// part one: sled policy
-			int n = sled(tmp);
-			valid_sled += n;
 
-			// part two: toboggan policy
-			int k = toboggan(tmp);
-			valid_toboggan += k;
+	while (fgets(buffer, MAXLINE, stdin)) {
+		policy tmp = load_struct(buffer);
 
-			// flush out buffer
-			memset(buffer, 0, MAXLINE);
-			i = 0;
-		}	
-		else
-			buffer[i++] = (char)c;
+		// part one: sled
+		int n = sled(tmp);
+		valid_sled += n;
+
+		// part two: toboggan
+		int k = toboggan(tmp);
+		valid_toboggan += k;
+
+		memset(buffer, 0, MAXLINE);
 	}
 
 	assert(valid_sled == 582);
