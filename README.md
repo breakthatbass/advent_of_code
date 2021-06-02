@@ -1,9 +1,22 @@
 # 🎄 Advent of Code 2020 🎄
 https://adventofcode.com/
 
-My solutions in C.
+My solutions in C.  
+Each day can be compiled and run in its own directory.  
+Each day has its own `Makefile` with way too many compiler flags.  
 
-Each day's solution can be compiled with `gcc main.c` unless the directory has a `Makefile` in which case it has to be compiled with `make`.  
-Each solution is deisgned to take the input through `stdin` in the form of `./a.out < input`
+I'm still working on this currently. The goal is to get each day solved in under a second...but not to lose sleep over it if I don't.
 
-Happy Holidays!
+Simply compile and run with these commands:
+```
+make
+./a.out < input     # each day reads from stdin
+```
+
+## benchmarks
+~2015 MacBook Pro 2.7 GHz Dual-Core Intel Core i5
+
+| Day       | Time (seconds)|
+|-----------|---------------|
+|1          |0.003150       |
+|2          |0.000297       |
