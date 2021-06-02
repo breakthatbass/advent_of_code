@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include "../timing.h"
+
 #define MAXLINE 35
 #define MAXLEN 323	// input is 323 lines long
 
@@ -29,7 +31,9 @@ int main()
 	int c;
 	int i = 0;
 	int j = 0;
+	timing t;
 
+	start_timing(&t);
 	while ((c = fgetc(stdin)) != EOF) {
 		if (c == '\n') {
 			i++;
@@ -46,8 +50,12 @@ int main()
 	slopes *= ride_snowy_hill(7, 1);
 	slopes *= ride_snowy_hill(1, 2);
 
-	printf("part 1: %lu\n", ride_snowy_hill(3, 1));
+	long p1 = ride_snowy_hill(3, 1);
+	end_timing(&t);
+
+	printf("part 1: %lu\n", p1);
 	printf("part 2: %lu\n", slopes);
+	printf("total time: %f\n", t.ttime);
 
 	return 0;
 }
