@@ -1,90 +1,53 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include <assert.h>
 
-struct policy {
-	int low;
-	int high;
-	char letter;
-	char *pass;
-}; typedef struct policy policy;
+#include "../timing.h"
 
+#define LINE 50
 
-#define MAXLINE 50
-
-
-// break string into tokens and set them in the struct
-policy load_struct(char *line)
+int sled(int min, int max, char c, char *pass)
 {
-	policy tmp;
-		
-	tmp.low = atoi(strtok(line, "-"));
-	tmp.high = atoi(strtok(NULL, " "));
-	tmp.letter = *strtok(NULL, ":");
-	tmp.pass = strtok(NULL, "\n\r\v\f");
-
-	return tmp;
+    int count = 0;
+    while (*pass) {
+        if (*pass == c) count++;
+        pass++;
+    }
+    if (count >= min && count <= max)
+        return 1;
+    return 0;
 }
 
-
-// sled: check if password is valid according to sled policy
-int sled(policy tmp)
+int toboggan(int min, int max, char c, char *pass)
 {
-	int i;
-	int count = 0;
-	size_t len = strlen(tmp.pass);
-	
-	for (i = 0; i < len; i++){
-		if ((char)tmp.pass[i] == tmp.letter)
-			count++;
-	}
-	
-	if (count < tmp.low || count > tmp.high) {
-		return 0;
-	}
-	return 1;
+    if (pass[min-1] == c ^ pass[max-1] == c)
+        return 1;
+    return 0;
 }
 
-
-// toboggan: check if password is valid according to toboggan policy
-int toboggan(policy tmp)
+int main()
 {
-	// XOR for the win
-	if (tmp.pass[tmp.low] == tmp.letter ^ tmp.pass[tmp.high] == tmp.letter)
-		return 1;
-	return 0;
-}
+    int min, max;
+    char c;
+    char pass[LINE];
 
+    int valid_sled = 0;
+    int valid_toboggan = 0;
 
-int main(int argc, char **argv)
-{
-	char buffer[MAXLINE];
-	int i, c;
-	policy tmp;	
+    timing t;
 
-	int valid_sled = 0;		// keep track of valid sled passwords
-	int valid_toboggan = 0; // keep track of valid toboggan passwords
+    start_timing(&t);
+    while (fscanf(stdin, "%d-%d %c: %s", &min, &max, &c, pass) == 4) {
+        valid_sled += sled(min, max, c, pass);
+        valid_toboggan += toboggan(min, max, c, pass);
+    }
+    end_timing(&t);
 
-	while (fgets(buffer, MAXLINE, stdin)) {
-		policy tmp = load_struct(buffer);
-
-		// part one: sled
-		int n = sled(tmp);
-		valid_sled += n;
-
-		// part two: toboggan
-		int k = toboggan(tmp);
-		valid_toboggan += k;
-
-		memset(buffer, 0, MAXLINE);
-	}
-
-	assert(valid_sled == 582);
-	assert(valid_toboggan == 729);
+    assert(valid_sled == 582);
+    assert(valid_toboggan == 729);
 
 	printf("valid sled passwords: %d\n", valid_sled);
 	printf("valid toboggan passwords: %d\n", valid_toboggan);
+    printf("total time: %f\n", t.ttime);
 
-	return 0;
+    return 0;
 }
