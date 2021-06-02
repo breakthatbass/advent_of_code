@@ -20,10 +20,10 @@ extern "C" {
 char **split(char *s, const char *delim);
 
 // print_arr: print each string in an array of strings
-void print_arr(char **vec);
+void print_arr(char **arr);
 
 // arr_len: get length of an array of strings
-int arr_len(char **vec);
+int len(char **arr);
 
 #ifdef __cplusplus
 }

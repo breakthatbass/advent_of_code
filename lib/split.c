@@ -76,7 +76,7 @@ void print_arr(char **vec)
 
 
 // arr_len: get length of an array of strings
-int arr_len(char **vec)
+int len(char **vec)
 {
     int l = 0;
     while(*vec) {
