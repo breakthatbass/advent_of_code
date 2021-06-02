@@ -1,27 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
-#include "../lib/converters.h"
+#include "../lib/converter.h"
+#include "../timing.h"
 
-#define ROWLEN 7
-#define COLLEN 3
+#define BUF 15
 #define TKTLEN 1024
 
-static int tkt_count = 0;
-
 // qsort
-int cmpfunc (const void * a, const void * b) {return ( *(int*)a - *(int*)b );}
+static int cmpfunc (const void * a, const void * b) {return ( *(int*)a - *(int*)b );}
 
-// look through ticket array to find my ticket
-int get_my_tkt(uint64_t *a, int len)
+/* parse ticket, convert to binary, place binary in both row and col strings */
+static void to_bin(char *ticket, char **row, char **col)
 {
-    qsort(a, len, sizeof(uint64_t), cmpfunc);
+    *row = calloc(10, sizeof(char));
+    *col = calloc(10, sizeof(char));
+    if (!row || !col) {
+        perror("calloc");
+        exit(1);
+    }
 
-    while (*a++) {
-        if (*a == *(a+1)-1)
+    while (*ticket) {
+        switch(*ticket) {
+        case 'F':
+            *(*row)++ = '0';
+            break;
+        case 'B':
+            *(*row)++ = '1';
+            break;
+        case 'L':
+            *(*col)++ = '0';
+            break;
+        case 'R':
+            *(*col)++ = '1';
+            break;
+        default:
+            break;
+        }
+        ticket++;
+    }
+    *row -= 7;
+    *col -= 3;
+}
+
+
+int find_my_ticket(int *tkts, int len)
+{
+    qsort(tkts, len, sizeof(int), cmpfunc);
+
+    while (*tkts++) {
+        if (*tkts == *(tkts+1)-1)
             continue;
-        else return *a+1;
+        else return *tkts+1;
     }
     return 0; // problemz
 }
@@ -29,56 +61,40 @@ int get_my_tkt(uint64_t *a, int len)
 
 int main()
 {
-    int c;
-    // array for all the tickets
-    uint64_t *tkts = malloc(sizeof(uint64_t)*TKTLEN);
-    char *rows = malloc(sizeof(char)*ROWLEN); // F & B chars
-    char *col = malloc(sizeof(char)*COLLEN);  // L & R chars
-    if (tkts == NULL || rows == NULL || col == NULL) {
-        fprintf(stderr, "memory problemz\n");
-        exit(EXIT_FAILURE);
+    char buf[BUF];
+    char *row = NULL;
+    char *col = NULL;
+    int seat, largest_seat;
+    timing t;
+
+    uint32_t row_dec, col_dec;
+
+    int tkts[TKTLEN]; int i = 0;
+
+    start_timing(&t);
+    while (fgets(buf, BUF, stdin)) {
+        
+        to_bin(buf, &row, &col);
+
+        /* convert to decimals */
+        row_dec = btod(row);
+        col_dec = btod(col);
+        
+        seat = row_dec * 8 + col_dec;
+        if (seat > largest_seat) largest_seat = seat;
+        tkts[i++] = seat;
+
+        free(row);
+        free(col);
     }
-    
-    uint64_t h_pass = 0; // keep track of largest number
 
-    while ((c = fgetc(stdin)) != EOF) {
-        switch(c) {
-        case '\n':
-            rows -= ROWLEN;
-            col -= COLLEN;
-            //convert to dec
-            uint64_t row_dec = btod(rows);
-            uint64_t col_dec = btod(col);
-            uint64_t total = row_dec * 8 + col_dec;
-            *tkts++ = total; tkt_count++;
-            if (total > h_pass) h_pass = total;
-            break;
-        case 'F':
-            *rows++ = '0';
-            break;
-        case 'B':
-            *rows++ = '1';
-            break;
-        case 'L':
-            *col++ = '0';
-            break;
-        case 'R':
-            *col++ = '1';
-            break;
-        default:
-            break;
-        }
-    }
-    // pointer back to start
-    tkts -= tkt_count;
-    int my_seat = get_my_tkt(tkts, tkt_count);
+    int my_seat = find_my_ticket(tkts, i);
+    end_timing(&t);
 
-    printf("part 1: %llu\n", h_pass);
-    printf("part 2: %d\n", my_seat);
+    assert(largest_seat == 838);
+    assert(my_seat == 714);
 
-    free(rows);
-    free(col);
-    free(tkts);
+    printf("total time: %f\n", t.ttime);
 
     return 0;
 }

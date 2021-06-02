@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS=-W -Wall -Werror -Wextra -pedantic
-SRC_FILES=main.c ../lib/converters.c
+CFLAGS=-O2 -Os -W -Wall -Werror -Wextra -pedantic -Wshadow -Wstrict-overflow -fno-strict-aliasing -fsanitize=address
+SRC_FILES=t.c ../lib/converter.c
 
 all: $(SRC_FILES)
 	$(CC) $(SRC_FILES) $(CFLAGS)
