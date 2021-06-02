@@ -1,156 +1,157 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
+#include <assert.h>
+
+#include "../timing.h"
+#include "../lib/split.h"   /* split, len */
+#include "../lib/strlib.h"  /* strafter, cpy_until */
+
 
 #define MAXLINE 500
-char fields[][4] = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"};    
+#define MAXPASS 1096
 
-// get_val: extract the value from desired field
-char *get_val(char *passport, char *field)
+static const char *fields[7] = {
+    "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"
+};
+
+#define LEN() (sizeof(fields)/sizeof(fields[0]))
+
+int validate(char *s)
 {
-	char *t;
-	char *s;  // hold pointer after field
-	char *cs; // hold pointer from s after ':'
-	
-	// copy passport as to not mutilate original
-	char *cpy = malloc(sizeof(char)*strlen(passport)+1);
-	if (cpy == NULL) {
-		fprintf(stderr, "malloc failed\n");
-		exit(1);
-	}
-	strcpy(cpy, passport);
-	if ((s = strstr(cpy, field))) {
-		cs = strstr(s, ":");
-		memmove(cs, cs+1, strlen(cs));
-		t = strtok(cs, " \n");
-	}
-	free(cpy);
-	return t;
+    int field_count = 0;
+
+    for (unsigned long i = 0; i < LEN(); i++) {
+        if (strstr(s, fields[i]))
+            field_count++;
+    }
+
+    if (field_count == 7)
+        return 1;
+    return 0;
 }
 
-
-// check_passport: verify if contains required fields
-int check_passport(char *passport)
+int extra_validation(char *s)
 {
-	for (int i = 0; i < 7; i++) 
-		if (strstr(passport, fields[i]) == NULL) return 0;
-	return 1;
-}
+    char **split_pass;
+    char *tmp;
+    int n;
 
+    /* split: split a string into sep strings based on delimiter(s) - ' ' and '\n' */
+    split_pass = split(s, " \n");
+    print_arr(split_pass);
+    printf("-----\n\n");
+    return 1;
 
-// check each value and determine if they fall within parameters
-int extra_validation(char *passport)
-{
-	// make sure all fields are present
-	if (check_passport(passport) == 0) return 0;
+    int i = 0;
 
-	int n, i;
-	char *s, *cs, *t;
+    if (len(split_pass) < 7) goto fail;
+    /* strafter: search str for substring, if found, move pointer to after sunstring */
+    while (*split_pass) {
 
-	int vf = 0;	// validated fields count. need 7
+        /* birth year */
+        if ((tmp = strafter(*split_pass, "byr:"))) {
+            n = atoi(tmp);
+            if (n < 1920 || n > 2002) goto fail;
 
-	for (i = 0; i < 7; i++) {
-		s = get_val(passport, fields[i]);
-		// now we check each field...
-		
-		// BIRTH YEAR
-		if (strcmp(fields[i], "byr") == 0) {
-			int n = atoi(s);
-			if (n < 1920 || n > 2002) return 0;
-			else vf++;
-		}
-		// ISSUE YEAR
-		else if (strcmp(fields[i], "iyr") == 0) {
-			int n = atoi(s);
-			if (n < 2010 || n > 2020) return 0;
-			else vf++;
-		}
-		// EXPIRATION YEAR
-		else if (strcmp(fields[i], "eyr") == 0) {
-			int n = atoi(s);
-			if (n < 2020 || n > 2030) return 0;
-			else vf++;
-		}
-		// HEIGHT
-		else if (strcmp(fields[i], "hgt") == 0) {
-			if (strstr(s, "cm")) {
-				//printf("%s: ", s);
-				char *t = strtok(s, "c");
-				//printf("%s\n", t);
-				int n = atoi(t);
-				if (n < 150 || n > 193) return 0;
-			} else if (strstr(s, "in")) {
-				char *t = strtok(s, "i");
-				int n = atoi(t);
-				if (n < 59 || n > 76) return 0;
-			}
-			vf++;
-		}
-		// HAIRCOLOR
-		else if (strcmp(fields[i], "hcl") == 0) {
-			size_t len = strlen(s);
-			// must start with '#' and have 7 characters
-			if (s[0] != '#' || len != 7) return 0;
-			for (int i = 0; i < len; i++) {
-				if (s[i] < 0 || s[i] > 9) continue;
-				else if (s[i] < 'a' && s[i] > 'f') continue;
-				else return 0;
-			}
-			vf++;
-		}
-		// EYE COLOR
-		else if (strcmp(fields[i], "ecl") == 0) {
-			// valid eye colors
-			int found = 0;
-			char eyc[][7] = {"amb", "blu", "brn", "gry", "grn", "hzl", "oth"};
-			for (int i = 0; i < 7; i++) {
-				if (strcmp(s, eyc[i]) == 0) {
-					found = 1;
-					break;
-				}
-			}
-			if (found == 1) vf++;
-			else return 0;
-		}
-		else {
-			// PASSPORT ID
-			if (strcmp(fields[i], "pid") == 0) {
-				if (strlen(s) != 9) return 0;
-				vf++;
-			}
-		}
-	}
-	if (vf != 7) return 0;
-	return 1;
+        /* issue year */
+        } else if ((tmp = strafter(*split_pass, "iyr:"))) {
+            n = atoi(tmp);
+            if (n < 2010 || n > 2020) goto fail;
+
+        /* expiration year */
+        } else if ((tmp = strafter(*split_pass, "eyr:"))) {
+            n = atoi(tmp);
+            if (n < 2020 || n > 2030) goto fail;
+        
+        /* height */
+        } else if ((tmp = strafter(*split_pass, "hgt:"))) {
+            if (strstr(*split_pass, "cm")) {
+                char t[10];
+                cpy_until(t, tmp, 'c');
+                n = atoi(t);
+                if (n < 150 || n > 193) goto fail;
+            } else if (strstr(*split_pass, "in")) {
+                char t[10];
+                cpy_until(t, tmp, 'i');
+                n = atoi(t);
+                if (n < 59 || n > 76) goto fail;
+            } else goto fail;
+
+        /* hair color */
+        } else if ((tmp = strafter(*split_pass, "hcl:"))) {
+            if (*(tmp++) != '#') goto fail;
+            
+            while (*tmp) {
+                if (!(*tmp >= '0' && *tmp <= '9') &&
+			    !(*tmp >= 'a' && *tmp <= 'f')) goto fail;
+                tmp++;
+            }
+        
+        /* eye color */
+        } else if ((tmp = strafter(*split_pass, "ecl:"))) {
+            //printf("ecl: %s\n", tmp);
+            if (
+                strcmp(tmp, "amb") && strcmp(tmp, "blu") &&
+                strcmp(tmp, "brn") && strcmp(tmp, "gry") &&
+		        strcmp(tmp, "grn") && strcmp(tmp, "hzl") &&
+		        strcmp(tmp, "oth")
+            ) goto fail;
+            //printf("\t->passed: %s\n", tmp);
+        
+        /* passport ID */
+        } else if ((tmp = strafter(*split_pass, "pid:"))) {
+            if (strlen(tmp) != 9) goto fail;
+        }
+        split_pass++;
+        i++;
+        tmp = NULL;
+    }
+    split_pass -= i;
+    free(split_pass);
+    return 1;
+
+fail:
+    split_pass -= i;
+    free(split_pass);
+    return 0;
 }
 
 
 int main()
 {
-	char buf[MAXLINE];
-	int i, c;
-	
-	int valid = 0;
-	int extra_valid = 0;
-	i = 0;
+    char buf[MAXLINE];
+    char passport[MAXPASS];
+    char *s;
+    timing t;
 
-	while ((c = fgetc(stdin))) {
-		if (buf[i-1] == '\n' && c == '\n') {
-			valid += check_passport(buf);
-			extra_valid += extra_validation(buf);
-			i = 0;
-			memset(buf, 0, MAXLINE);
-		} else if (feof(stdin)) {
-			// we're at the last passport
-			valid += check_passport(buf);
-			extra_valid += extra_validation(buf);
-			break;
-		} else buf[i++] = c;
-	}
+    int valid = 0;
+    int extra_valid = 0;
 
-	printf("part 1: %d\n", valid);
-	printf("part 2: %d\n", extra_valid);
+    start_timing(&t);
+    while ((s = fgets(buf, MAXLINE, stdin))) {
+        if (strcmp(buf, "\n") != 0) {
+            if (passport[0] == 0) 
+                strcpy(passport, buf);
+            else 
+                strcat(passport, buf);
+        } else {
+            valid += validate(passport);
+            extra_valid += extra_validation(passport);
+            memset(passport, 0, MAXPASS);
+        }
+    }
+    /* we exit the loop before the last passport is processed */
+    valid += validate(passport);
+    extra_valid += extra_validation(passport);
+    end_timing(&t);
+    
+    assert(valid == 182);
+    //assert(extra_valid == 109);
 
-	return 0;
+    printf("part1: %d\n", valid);
+    printf("part2: %d\n", extra_valid);
+    printf("total time: %f\n", t.ttime);
+    
+    return 0;
 }
