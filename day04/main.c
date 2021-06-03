@@ -39,9 +39,6 @@ int extra_validation(char *s)
 
     /* split: split a string into sep strings based on delimiter(s) - ' ' and '\n' */
     split_pass = split(s, " \n");
-    print_arr(split_pass);
-    printf("-----\n\n");
-    return 1;
 
     int i = 0;
 
@@ -90,14 +87,12 @@ int extra_validation(char *s)
         
         /* eye color */
         } else if ((tmp = strafter(*split_pass, "ecl:"))) {
-            //printf("ecl: %s\n", tmp);
             if (
                 strcmp(tmp, "amb") && strcmp(tmp, "blu") &&
                 strcmp(tmp, "brn") && strcmp(tmp, "gry") &&
 		        strcmp(tmp, "grn") && strcmp(tmp, "hzl") &&
 		        strcmp(tmp, "oth")
             ) goto fail;
-            //printf("\t->passed: %s\n", tmp);
         
         /* passport ID */
         } else if ((tmp = strafter(*split_pass, "pid:"))) {

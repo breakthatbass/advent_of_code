@@ -1,7 +1,7 @@
 CC=gcc
-CFLAGS=-O2 -Wall -Wextra -pedantic -Werror -Wshadow -Wstrict-overflow -fno-strict-aliasing
+CFLAGS=-O2 -Os -W -Wall -Werror -Wextra -pedantic -Wshadow -Wstrict-overflow -fno-strict-aliasing -fsanitize=address
+SRC=main.c
+LIBS=../lib/split.c ../lib/strlib.c
 
-all: a.out
-
-a.out: main.c ../lib/strlib.c ../lib/split.c
-	$(CC) main.c ../lib/strlib.c ../lib/split.c $(CFLAGS)
+all: $(SRC)
+	$(CC) $(SRC) $(LIBS) $(CFLAGS)
