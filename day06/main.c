@@ -1,120 +1,113 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <assert.h>
 
-#include "../lib/array.h" // split
+#include "../lib/strlib.h"  // cpy_until
+#include "../timing.h"
 
-#define MAXCHAR 28
-#define MAXLINE 1024
-
-// store each groups answers for part 1
-static char answers[MAXCHAR];
-static int len = 0;
+#define BUF 1024
+#define MAXALPHA 28
 
 
-// search for c in answers, add if not present (part 1)
-void find(char c)
+// count_yes: read through answers, count the number of unique answers
+size_t count_yes(char *s)
 {
-	if (!isalpha(c)) return;
+	char answers[MAXALPHA] = {0};
+	int len = 0;
+	
+	// add any char that isn't already in answers
+	while (*s) {
+		if (strchr(answers, *s) == NULL && *s != '\n') {
+			answers[len++] = *s;
+		}
+		s++;
+	}
 
-	if (strchr(answers, c) == NULL) 
-		answers[len++] = c;
+	// now we get a count with strlen
+	return strlen(answers);
 }
 
 
-// find chars where all people answered yes (part 2)
-int all_yes(char *buf)
+// get the number of people in a group
+int count_people(char *s)
 {
-	int total = 0;
-	int s_els = 0; // keep track of the # of elements in s to free later
-	// split: break up string into array of strings based on delimiter
-	char **s = split(buf, "\n");
-	char *ref = malloc(sizeof(char) * strlen(*s)+1);
-	assert(s);
-	assert(ref);
+	int count = 0;
 
-	// copy over first string to use as a reference
-	strcpy(ref, *s);
-	
-	// take care of the one liners
-	if (*++s == NULL) {
-		printf("%s -> ", *--s);
-		printf("%zu\n", strlen(*s));
-		return strlen(*s);
-	}
-	s_els++;
-
-	int ref_len;
 	while (*s) {
-		ref_len = 0;
-		while (*ref) {
-			// X any char in ref that is not in other strings
-			if (strchr(*s, *ref) == NULL) 
-				*ref = 'X';
-			ref++;
-			ref_len++;
-		}
-		// reset pointer
-		ref -= ref_len;
+		if (*s == '\n') count++;
 		s++;
-		s_els++;
 	}
-	
-	while(*ref) {
-		if (*ref != 'X') {
-			printf("%c", *ref);
-			total++;
-		}
-		ref++;
-	}
+	return count;
+}
 
-	// bring pointers back and free thier asses
-	ref -= ref_len;
-	s -= s_els;
-	free(s);
-	free(ref);
+
+// get the number of times char c is in str s
+int count_chars(char *s, char c)
+{
+	int count = 0;
+
+	while (*s) {
+		if (*s == c) count++;
+		s++;
+	}
+	return count;
+}
+
+
+// get the number of answers that all people in group answered yes
+int all_yes(char *s)
+{
+	int people, chars, total;
+
+	total = 0;
+	people = count_people(s);
 	
-	if (total > 0) // don't print blanks
-		printf(" -> %d\n", total);
+	while (*s) {
+		if (*s != '\n') {
+			chars = count_chars(s, *s);
+			if (chars == people) total++;
+		}
+		s++;
+	}
 	return total;
 }
 
 
+
 int main()
 {
-	int c, prev, i;
-	char buf[MAXLINE];
+	char buf[BUF];
+	char group[BUF] = {0};
+	size_t part1_total = 0;
+	int part2_total = 0;
+	timing t;
 
-	int part1 = 0;
-	int part2 = 0;
-	
-	while ((c = fgetc(stdin))) {
-		if (feof(stdin)) {
-			// last group
-			buf[i-1] = '\0'; // null terminate the string
-			find(c);
-			part1 += len;
-			part2 += all_yes(buf);
-			break;
+	start_timing(&t);
+	while (fgets(buf, BUF, stdin)) {
+		if (strcmp(buf, "\n") != 0) {
+			if (group[0] == 0)
+				strcpy(group, buf);
+			else
+				strcat(group, buf);
+		} else {
+			all_yes(group);
+			part1_total += count_yes(group);
+			part2_total += all_yes(group);
+			memset(group, 0, BUF);
 		}
-		if (c == '\n' && prev == '\n') {
-			// we got us a group
-			buf[i-1] = '\0'; // null terminate the string
-			part1 += len;
-			part2 += all_yes(buf);
-			len = 0;
-			i = 0;
-			
-			memset(answers, 0, MAXCHAR);
-			memset(buf, 0, MAXLINE);
-		}
-		find(c);
-		prev = c;
-		buf[i++] = c;
 	}
-	printf("part 1: %d\n", part1);
-	printf("part 2: %d\n", part2);  // not 2903 (way too low), 3558, 4222, or 3312
+	// last group can't be access in while loop
+	part1_total += count_yes(group);
+	part2_total += all_yes(group);
+
+	end_timing(&t);
+
+	assert(part1_total == 6587);
+	assert(part2_total == 3235);
+
+	printf("part 1: %zu\n", part1_total);
+	printf("part 2: %d\n", part2_total);
+	printf("total time: %f\n", t.ttime);
+
 	return 0;
 }
