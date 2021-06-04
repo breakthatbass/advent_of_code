@@ -2,7 +2,6 @@
 #include <string.h>
 #include <assert.h>
 
-#include "../lib/strlib.h"  // cpy_until
 #include "../timing.h"
 
 #define BUF 1024
@@ -96,7 +95,7 @@ int main()
 			memset(group, 0, BUF);
 		}
 	}
-	// last group can't be access in while loop
+	// last group can't be accessed in while loop
 	part1_total += count_yes(group);
 	part2_total += all_yes(group);
 
