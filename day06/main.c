@@ -21,9 +21,7 @@ size_t count_yes(char *s)
 		}
 		s++;
 	}
-
-	// now we get a count with strlen
-	return strlen(answers);
+	return len;
 }
 
 
