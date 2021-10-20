@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall -Werror -W -Wextra -pedantic -fsanitize=address
+CFLAGS=-g -Wall -Werror -W -Wextra -pedantic -O2
 SRC_FILE=main.c lib/baglist.c
 
 NAME=bags
