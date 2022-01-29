@@ -2,22 +2,32 @@ package main
 
 import (
 	"aoc/day01"
-	"aoc/utils"
+	"fmt"
+	"os"
+	"strings"
 )
 
-/*
-func check_args(args []string) *string {
+func checkArgs(args []string) *string {
+
 	if len(args[1:]) != 1 {
 		return nil
 	} else {
-		return &args[1]
+		a := strings.TrimRight(args[1], "\n")
+		return &a
 	}
 }
-*/
 
 func main() {
-	//poo := check_args(os.Args)
+	day := checkArgs(os.Args)
+	if day == nil {
+		fmt.Println("usage: ./aoc day")
+		os.Exit(1)
+	}
 
-	utils.Greeting()
-	day01.Run()
+	if strings.Compare(*day, "day01") == 0 {
+		day01.Run()
+	} else {
+		fmt.Printf("error: '%s' not found\n", *day)
+		os.Exit(1)
+	}
 }

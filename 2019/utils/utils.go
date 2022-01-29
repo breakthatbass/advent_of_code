@@ -10,31 +10,34 @@ import (
 	"github.com/muesli/termenv"
 )
 
-func file_path(pkg string) (*string, error) {
-	pre, err := os.Getwd()
-	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
-	full_path := fmt.Sprintf("%s/%s/input", pre, pkg)
-	return &full_path
-}
-
-func ReadToInts(file string) ([]int, error) {
-	path := file_path(day string) 
-
+/* *
+* ReadToInts
+*
+* @desc: read in a file line by line, attempt to atoi each line, save in array
+*
+* @param: `file` - the file to read.
+* @param: `size` - the size to make the array
+*
+* @return: the array if successful, else error
+**/
+func ReadToInts(file string, size int) ([]int, error) {
 	f, err := os.Open(file)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	i := 0
+	values := make([]int, size)
+
 	scanner := bufio.NewScanner(f)
-	values := []int{}
+
 	for scanner.Scan() {
 		val, err := strconv.Atoi(scanner.Text())
 		if err != nil {
 			return values, err
 		}
-		values = append(values, val)
+		values[i] = val
+		i++
 	}
 	return values, scanner.Err()
 }

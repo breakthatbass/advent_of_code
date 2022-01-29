@@ -1,46 +1,43 @@
 package day01
 
 import (
-	"bufio"
+	"aoc/utils"
 	"fmt"
 	"log"
-	"os"
-	"strconv"
 )
 
-func file_path(pkg string) *string {
-	pre, err := os.Getwd()
-	if err != nil {
-		fmt.Println(err)
-		return nil
+func part2(mass int) (total int) {
+	total = 0
+	for mass > 0 {
+		mass = ((mass / 3) - 2)
+		if mass < 0 {
+			mass = 0
+		}
+		total += mass
 	}
-	full_path := fmt.Sprintf("%s/%s/input", pre, pkg)
-	return &full_path
+	return total
+}
+
+func getMass(n []int) (int, int) {
+	total := 0
+	total2 := 0
+	l := len(n)
+	for i := 0; i < l; i++ {
+		mass := ((n[i] / 3) - 2)
+		total += mass
+		total2 += part2(n[i])
+	}
+	return total, total2
 }
 
 func Run() {
-	f_path := file_path("day01")
-
-	fp, err := os.Open(*f_path)
+	n, err := utils.ReadToInts("day01/input", 100)
 	if err != nil {
 		log.Fatal(err)
-		return
-	}
-	defer fp.Close()
-
-	scanner := bufio.NewScanner(fp)
-	total := 0
-
-	for scanner.Scan() {
-		line, err := strconv.Atoi(scanner.Text())
-		if err != nil {
-			log.Fatal(err)
-		}
-		mass := ((line / 3) - 2)
-		total += mass
-
 	}
 
-	fmt.Println("part 1:", total)
+	mass, biggermass := getMass(n)
 
+	fmt.Println("part 1:", mass)
+	fmt.Println("part 2:", biggermass)
 }
