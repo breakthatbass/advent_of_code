@@ -2,12 +2,9 @@ package utils
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
-
-	"github.com/muesli/termenv"
 )
 
 /* *
@@ -40,20 +37,4 @@ func ReadToInts(file string, size int) ([]int, error) {
 		i++
 	}
 	return values, scanner.Err()
-}
-
-func Greeting() {
-	p := termenv.ColorProfile()
-
-	welcome := termenv.String("Welcome to")
-	adv := termenv.String("Advent of Code")
-	year := termenv.String("2019!")
-
-	welcome = welcome.Foreground(p.Color("#D03B47"))
-	adv = adv.Foreground(p.Color("#F2F3F8"))
-	year = year.Foreground(p.Color("#5CB69B"))
-
-	greeting := fmt.Sprintf("%s %s %s\n", welcome, adv, year)
-
-	fmt.Println(greeting)
 }
