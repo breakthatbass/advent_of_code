@@ -1,22 +1,11 @@
-# 🎄 Advent of Code 2020 🎄
-https://adventofcode.com/
+## 🎄 Advent of Code 2020 🎄
+https://adventofcode.com/2020
 
-My solutions in C. *In progress...*   
-
-The goal is to get each day running in under a second...
-but to not lose sleep over it if i don't.
-
-Any of the days can be run from the root dir:
-```
-./run.sh dayXX
-```
-This will compile and run the program for the day supplied, print the
-answers for each part, and print the total time, and then
-clean up the binary.  
+My solutions in C. *In progress...*
 
 
-## benchmarks
-~2015 MacBook Pro 2.7 GHz Dual-Core Intel Core i5
+### benchmarks
+~2015 MacBook Pro 2.7 GHz Dual-Core Intel i5
 
 | Day       | Time (seconds)|
 |-----------|---------------|
