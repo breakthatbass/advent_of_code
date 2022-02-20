@@ -1,9 +1,11 @@
-package day01
+package main
 
 import (
-	"aoc/utils"
+	"bufio"
 	"fmt"
 	"log"
+	"os"
+	"strconv"
 )
 
 func part2(mass int) (total int) {
@@ -30,8 +32,30 @@ func getMass(n []int) (int, int) {
 	return total, total2
 }
 
+func readToInts(file string, size int) ([]int, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	i := 0
+	values := make([]int, size)
+
+	scanner := bufio.NewScanner(f)
+
+	for scanner.Scan() {
+		val, err := strconv.Atoi(scanner.Text())
+		if err != nil {
+			return values, err
+		}
+		values[i] = val
+		i++
+	}
+	return values, scanner.Err()
+}
+
 func Run() {
-	n, err := utils.ReadToInts("day01/input", 100)
+	n, err := readToInts("input", 100)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,4 +64,8 @@ func Run() {
 
 	fmt.Println("part 1:", mass)
 	fmt.Println("part 2:", biggermass)
+}
+
+func main() {
+	Run()
 }

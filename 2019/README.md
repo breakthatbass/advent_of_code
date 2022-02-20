@@ -1,3 +1,11 @@
-aoc 2019 in Go
+## 🎄 Advent of Code 2020 🎄
+https://adventofcode.com/2019
 
-day 1 xx
+My solutions in Go. *In progress...*
+
+### benchmarks
+~2015 MacBook Pro 2.7 GHz Dual-Core Intel i5
+
+| Day       | Time (seconds)|
+|-----------|---------------|
+|1          |0.0048         |
