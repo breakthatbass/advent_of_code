@@ -7,6 +7,8 @@ My solutions in C. *In progress...*
 ### benchmarks
 ~2015 MacBook Pro 2.7 GHz Dual-Core Intel i5
 
+All benchmarks are done with [hyperfine](https://github.com/sharkdp/hyperfine)
+
 | Day       |  Time (seconds) |
 |-----------|-----------------|
 | 1         | 0.0059          |
