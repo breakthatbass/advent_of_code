@@ -1,4 +1,4 @@
-[--- Day 1: Report Repair ---](https://adventofcode.com/2020/day/1)
+ # [--- Day 1: Report Repair ---](https://adventofcode.com/2020/day/1)
 
 After saving Christmas five years in a row, you've decided to take a vacation at a nice resort on a tropical island. 
 Surely, Christmas will go on without you.
@@ -36,7 +36,7 @@ Of course, your expense report is much larger. Find the two entries that sum to
 
 Your puzzle answer was `157059`.
 
---- Part Two ---
+## --- Part Two ---
 
 The Elves in accounting are thankful for your help; one of them even offers you a starfish coin they had 
 left over from a past vacation. They offer you a second one if you can find three numbers in your expense report that 
