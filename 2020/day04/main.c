@@ -1,3 +1,8 @@
+/**
+ * compile: gcc -O3 main.c ../lib/split.c ../lib/strlib.c
+ * or simply: gcc -O3 main.c ../lib/\*.c   # ignore the '\'
+ * */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
