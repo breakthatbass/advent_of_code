@@ -1,100 +1,65 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-
-#include "../lib/converter.h"
-#include "../timing.h"
 
 #define BUF 15
 #define TKTLEN 1024
 
+#define ROWNIB(b) (((b) >> 3) & 0x7F)	// get the upper 7 bits
+#define COLNIB(b) ((b) & 0x7)			// get the lower 3 bits
+
 // qsort
 static int cmpfunc (const void * a, const void * b) {return ( *(int*)a - *(int*)b );}
 
-/* parse ticket, convert to binary, place binary in both row and col strings */
-static void to_bin(char *ticket, char **row, char **col)
+// convert a string of chars to a binary string
+uint32_t to_bin(char *tkt)
 {
-    *row = calloc(10, sizeof(char));
-    *col = calloc(10, sizeof(char));
-    if (!row || !col) {
-        perror("calloc");
-        exit(1);
-    }
+	unsigned int n = 0;
 
-    while (*ticket) {
-        switch(*ticket) {
-        case 'F':
-            *(*row)++ = '0';
-            break;
-        case 'B':
-            *(*row)++ = '1';
-            break;
-        case 'L':
-            *(*col)++ = '0';
-            break;
-        case 'R':
-            *(*col)++ = '1';
-            break;
-        default:
-            break;
-        }
-        ticket++;
-    }
-    *row -= 7;
-    *col -= 3;
+	while (*tkt != '\n') {
+		n = n << 1 | (*tkt == 'B') | (*tkt == 'R');
+		tkt++;
+	}
+	return n;
 }
 
-
-int find_my_ticket(int *tkts, int len)
+int find_my_ticket(uint32_t *tkts, uint32_t len)
 {
     qsort(tkts, len, sizeof(int), cmpfunc);
 
     while (*tkts++) {
-        if (*tkts == *(tkts+1)-1)
+        if (*tkts == *(tkts+1) - 1)
             continue;
-        else return *tkts+1;
+        else return *tkts + 1;
     }
     return 0; // problemz
 }
 
-
-int main()
+int main(void)
 {
-    char buf[BUF];
-    char *row = NULL;
-    char *col = NULL;
-    int seat, largest_seat;
-    timing t;
+	char buf[BUF] = {0};
+	uint32_t row, col, seat, largest_seat;
+	uint32_t tkts[TKTLEN]; uint32_t i = 0;
 
-    uint32_t row_dec, col_dec;
+	largest_seat = 0;
 
-    int tkts[TKTLEN]; int i = 0;
+	while (fgets(buf, BUF, stdin)) {
+		
+		seat = to_bin(buf);
+		row = ROWNIB(seat);
+		col = COLNIB(seat);
 
-    start_timing(&t);
-    while (fgets(buf, BUF, stdin)) {
-        
-        to_bin(buf, &row, &col);
+		seat = row * 8 + col;
+		if (seat > largest_seat) largest_seat = seat;
+		
+		tkts[i++] = seat;
+	}
 
-        /* convert to decimals */
-        row_dec = btod(row);
-        col_dec = btod(col);
-        
-        seat = row_dec * 8 + col_dec;
-        if (seat > largest_seat) largest_seat = seat;
-        tkts[i++] = seat;
+	uint32_t my_seat = find_my_ticket(tkts, i);
 
-        free(row);
-        free(col);
-    }
+	printf("largest seat: %d\n", largest_seat);
+	printf("my seat: %d\n", my_seat);
 
-    int my_seat = find_my_ticket(tkts, i);
-    end_timing(&t);
 
-    assert(largest_seat == 838);
-    assert(my_seat == 714);
-
-    printf("total time: %f\n", t.ttime);
-
-    return 0;
+	return 0;
 }
