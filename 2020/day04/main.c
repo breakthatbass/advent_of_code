@@ -3,7 +3,6 @@
 #include <string.h>
 #include <assert.h>
 
-#include "../timing.h"
 #include "../lib/split.h"   /* split, len */
 #include "../lib/strlib.h"  /* strafter, cpy_until */
 
@@ -118,12 +117,10 @@ int main()
     char buf[MAXLINE];
     char passport[MAXPASS];
     char *s;
-    timing t;
 
     int valid = 0;
     int extra_valid = 0;
 
-    start_timing(&t);
     while ((s = fgets(buf, MAXLINE, stdin))) {
         if (strcmp(buf, "\n") != 0) {
             if (passport[0] == 0) 
@@ -139,14 +136,12 @@ int main()
     /* we exit the loop before the last passport is processed */
     valid += validate(passport);
     extra_valid += extra_validation(passport);
-    end_timing(&t);
     
     assert(valid == 182);
     //assert(extra_valid == 109);
 
     printf("part1: %d\n", valid);
     printf("part2: %d\n", extra_valid);
-    printf("total time: %f\n", t.ttime);
     
     return 0;
 }
