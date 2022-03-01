@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdint.h>
-//#include <stdlib.h>
 
 #define BUF 15
 #define TKTLEN 1024
