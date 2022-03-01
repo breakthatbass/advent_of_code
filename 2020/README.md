@@ -14,7 +14,7 @@ All benchmarks are done with [hyperfine](https://github.com/sharkdp/hyperfine)
 | 1   | 0.0059         |
 | 2   | 0.0044         |
 | 3   | 0.0048         |
-| 4   | 0.010896       |
+| 4   | 0.0048         |
 | 5   | 0.000721       |
 | 6   | 0.001403       |
 | 7   | 0.067344       |
