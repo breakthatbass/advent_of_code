@@ -3,40 +3,50 @@
 
 #define LEN 200
 
-static int part1;
-static int part2;
 
-// messy but it's efficient
-void count(int *n)
+int part1(int *n)
 {
-	for (int i = 0; i < LEN; i++) {
-		for (int j = 0; j < LEN; j++) {
-			if (i == j) continue;
-			if (n[i] + n[j] == 2020) 
-				part1 = n[i] * n[j];
-			for (int k = 0; k < LEN; k++) {
-				if (i == j && i == k) continue;
-				if (n[i] + n[j] + n[k] == 2020) {
-					part2 = n[i] * n[j] * n[k];
-					return;
-				}
-			}
-		}
-	}
+    int i, j;
+    for (i = 0; i < LEN; i++) {
+        for (j = 0; j < LEN; j++) {
+            if (i == j) continue;
+            if (n[i] + n[j] == 2020) 
+                return n[i]*n[j];
+        }
+    }
+    return 0;
 }
 
 
-int main()
+int part2(int *n)
+{
+    int i, j, k;
+    for (i = 0; i < LEN; i++) {
+        for (j = 0; j < LEN; j++) {
+            for (k = 0; k < LEN; k++) {
+                if (i == j && i == k) continue;
+                if (n[i] + n[j] + n[k] == 2020)
+                    return n[i]*n[j]*n[k];
+            }
+        }
+    }
+    return 0;
+}
+
+
+int main(void)
 {
 
     int nums[LEN];
     int i = 0;
+
     while (fscanf(stdin, "%d", &nums[i++]) == 1);
 
-	count(nums);
+	int p1 = part1(nums);
+	int p2 = part2(nums);
 
-	assert(part1 == 157059);
-	assert(part2 == 165080960);
+	assert(p1 == 157059);
+	assert(p2 == 165080960);
 	
     return 0;
 }
