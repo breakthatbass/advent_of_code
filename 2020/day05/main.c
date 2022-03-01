@@ -11,10 +11,10 @@
 // qsort
 static int cmpfunc (const void * a, const void * b) {return ( *(int*)a - *(int*)b );}
 
-// convert a string of chars to a binary string
+// convert a string of binary chars to an unsigned int
 uint32_t to_bin(char *tkt)
 {
-	unsigned int n = 0;
+	uint32_t n = 0;
 
 	while (*tkt != '\n') {
 		n = n << 1 | (*tkt == 'B') | (*tkt == 'R');
