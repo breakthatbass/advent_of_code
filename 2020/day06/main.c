@@ -2,8 +2,6 @@
 #include <string.h>
 #include <assert.h>
 
-#include "../timing.h"
-
 #define BUF 1024
 #define MAXALPHA 28
 
@@ -77,9 +75,7 @@ int main()
 	char group[BUF] = {0};
 	size_t part1_total = 0;
 	int part2_total = 0;
-	timing t;
 
-	start_timing(&t);
 	while (fgets(buf, BUF, stdin)) {
 		if (strcmp(buf, "\n") != 0) {
 			if (group[0] == 0)
@@ -97,14 +93,12 @@ int main()
 	part1_total += count_yes(group);
 	part2_total += all_yes(group);
 
-	end_timing(&t);
 
 	assert(part1_total == 6587);
 	assert(part2_total == 3235);
 
 	printf("part 1: %zu\n", part1_total);
 	printf("part 2: %d\n", part2_total);
-	printf("total time: %f\n", t.ttime);
 
 	return 0;
 }

@@ -3,7 +3,6 @@
 #include <string.h>
 #include <assert.h>
 
-#include "../timing.h"
 #include "lib/baglist.h"
 
 #define MAXLINE 1028
@@ -108,7 +107,6 @@ int bag_count(list_t *list, char *bag)
 int main(void)
 {
 	char line_buf[MAXLINE];
-	timing t;
 	
 	list_t *list = list_init();
 
@@ -117,7 +115,6 @@ int main(void)
 		parse(list, line_buf);
 	}
 
-	start_timing(&t);
 	int total_gold = 0;
 	bag_t *tmp = list->head;
 	while (tmp) {
@@ -127,11 +124,9 @@ int main(void)
 	}
 
 	int bagtotal = bag_count(list, "shiny gold");
-	end_timing(&t);
 	
 	printf("part 1: %d\n", total_gold);
 	printf("part 2: %d\n", bagtotal);
-	printf("total time: %f\n", t.ttime);
 
 	free(list);
 	return 0;
