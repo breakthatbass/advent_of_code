@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"os"
 	"strconv"
+
+	"github.com/muesli/termenv"
 )
 
 /**
@@ -26,4 +28,19 @@ func ReadInts() []int {
 		n = append(n, line)
 	}
 	return n
+}
+
+/**
+ * ColorStr
+ *
+ * @desc: colorize `s` with `hex` color.
+ *
+ * @param: `s` string to colorize.
+ * @param: `hex` hex color
+ *
+ * @return: `s` colored with `hex`.
+ **/
+func ColorStr(s string, hex string) termenv.Style {
+	p := termenv.ColorProfile()
+	return termenv.String(s).Foreground(p.Color(hex))
 }

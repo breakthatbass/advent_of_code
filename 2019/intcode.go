@@ -11,7 +11,7 @@ func Interpreter(intcode []int, DEBUG bool) int {
 
 	if DEBUG {
 		fmt.Println(intcode)
-		fmt.Printf("\nIntCode Program:\n")
+		fmt.Println("\nIntCode Program:\n")
 	}
 
 	for i := 0; i < len(intcode); i += 4 {

@@ -17,7 +17,7 @@ import (
 	"strings"
 )
 
-const DEBUG = false
+const DEBUG = true
 
 // convert an array of string ints to int ints
 func atoiArray(s []string) []int {
