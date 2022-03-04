@@ -17,7 +17,7 @@ import (
 	"strings"
 )
 
-/** convert an array of string ints to int ints **/
+// convert an array of string ints to int ints
 func atoiArray(s []string) []int {
 	var a []int
 
@@ -28,9 +28,7 @@ func atoiArray(s []string) []int {
 	return a
 }
 
-/**
- * read in a list of intcode numbers
- **/
+// read in a list of intcode numbers
 func readToString() []string {
 	var buf string
 	scanner := bufio.NewScanner(os.Stdin)
@@ -42,9 +40,8 @@ func readToString() []string {
 	return intcodes
 }
 
+// run the intcode virtual machine
 func interpreter(intcode []int) int {
-
-	//l := len(intcode)
 
 	// restore 1202 program alarm
 	intcode[1] = 12
