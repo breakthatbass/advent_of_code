@@ -9,6 +9,6 @@ From the Advent of Code wesbite:
 <br>
 
 [`2019`](https://github.com/breakthatbass/advent_of_code/tree/main/2019) - Go  
-[`2020`](https://github.com/breakthatbass/advent_of_code/tree/main/2020) - C
+[`2020`](https://github.com/breakthatbass/advent_of_code/tree/main/2020) - C  
 [`2021`](https://github.com/breakthatbass/advent_of_code/tree/main/2021) - Go
 
