@@ -8,7 +8,7 @@
 #define COLNIB(b) ((b) & 0x7)			// get the lower 3 bits
 
 // qsort
-static int cmpfunc (const void * a, const void * b) {return ( *(int*)a - *(int*)b );}
+static int cmpfunc (const void *a, const void *b) {return ( *(int*)a - *(int*)b );}
 
 // convert a string of binary chars to an unsigned int
 uint32_t to_bin(char *tkt)
@@ -22,7 +22,7 @@ uint32_t to_bin(char *tkt)
 	return n;
 }
 
-int find_my_ticket(uint32_t *tkts, uint32_t len)
+static int find_my_ticket(uint32_t *tkts, uint32_t len)
 {
     qsort(tkts, len, sizeof(int), cmpfunc);
 
@@ -43,21 +43,20 @@ int main(void)
 	largest_seat = 0;
 
 	while (fgets(buf, BUF, stdin)) {
-		
 		seat = to_bin(buf);
 		row = ROWNIB(seat);
 		col = COLNIB(seat);
 
 		seat = row * 8 + col;
 		if (seat > largest_seat) largest_seat = seat;
-		
+
 		tkts[i++] = seat;
 	}
 
 	uint32_t my_seat = find_my_ticket(tkts, i);
 
-	printf("largest seat: %d\n", largest_seat);
-	printf("my seat: %d\n", my_seat);
+	printf("largest seat: %u\n", largest_seat);
+	printf("my seat: %u\n", my_seat);
 
 
 	return 0;
