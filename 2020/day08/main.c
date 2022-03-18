@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../timing.h"
-
 #define INSTRUCT 15
 #define MAXBOOT 2000
 
@@ -110,9 +108,7 @@ int main()
     char in[INSTRUCT];
     signed int n;
     int i;
-	timing t;
 	
-	start_timing(&t);
     i = 0;
     while (fscanf(stdin, "%s %d", in, &n) == 2) {
         struct bootcode *bc = load_code(in, n);
@@ -126,9 +122,6 @@ int main()
    
 	find_corrupted(gameboy);
 	printf("part 2: %d\n", accumulator);
-	end_timing(&t);
-
-	printf("total time: %f\n", t.ttime);
 
     return 0;
 }
