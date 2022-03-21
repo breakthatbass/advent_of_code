@@ -20,3 +20,4 @@ All benchmarks are done with [hyperfine](https://github.com/sharkdp/hyperfine)
 | 7   | 0.6200         | 🌟🌟    |
 | 8   | 0.0043         | 🌟🌟    |
 | 9   | 0.0038         | 🌟🌟    |
+| 10  | 0.0033         | 🌟🌟    |
