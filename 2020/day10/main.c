@@ -11,7 +11,7 @@ int cmpfunc (const void * a, const void * b) {return (*(int*)a-*(int*)b);}
 
 
 // part 1
-int jolts(int *a, int len)
+int jolts(int len)
 {
 	int i = 0;
 	int ones = 0;
@@ -33,7 +33,7 @@ int jolts(int *a, int len)
 
 
 // part 2
-long combos(int *a, int len)
+long combos(int len)
 {
 	int i, j;
 	static long paths[MAX];
@@ -50,15 +50,15 @@ int main()
 {
 	int i = 0;
 	int len = 1;
-	while (scanf("%d", &adapters[i++]) == 1) 
+	while (fscanf(stdin, "%d", &adapters[i++]) == 1) 
 		len++;
 
 	qsort(adapters, len, sizeof(int), cmpfunc);
 	
-	int j = jolts(adapters, len);
+	int j = jolts(len);
 	printf("Part 1: %d\n", j);	
 	
-	long c = combos(adapters, len);
+	long c = combos(len);
 	printf("Part 2: %ld\n", c);
 
 	return 0;
