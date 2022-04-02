@@ -27,4 +27,7 @@ All benchmarks are done with [hyperfine](https://github.com/sharkdp/hyperfine)
 
 | Day | Time (seconds) | Star(s) |
 |-----|----------------|---------|
-| 1   | 0.0054         | 🌟🌟    |
+| 1   | 0.0054         | 🌟🌟     |
+| 2   | 0.0051         | 🌟🌟     |
+| 3   |                | 🌟      |
+
