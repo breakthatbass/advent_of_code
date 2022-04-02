@@ -1,49 +1,83 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
-// run the intcode virtual machine
-func Interpreter(intcode []int, DEBUG bool) int {
+// instructions
+const (
+	ADD   = 1 // adds the two parameters
+	MULT  = 2 // multiplies the two parameters
+	STORE = 3 // takes input, stores that at address[parameter]
+	OUT   = 4 // outputs value at address[paramter]
+	STOP  = 99
+)
 
-	// restore 1202 program alarm
-	intcode[1] = 12
-	intcode[2] = 2
+func RunIntcode(program []int, DEBUG bool) int {
 
-	if DEBUG {
-		fmt.Println(intcode)
-		fmt.Println("\nIntCode Program:\n")
-	}
-
-	for i := 0; i < len(intcode); i += 4 {
-		opcode := intcode[i]
-		input1 := intcode[i+1]
-		input2 := intcode[i+2]
-		output := intcode[i+3]
+	for i := 0; i < len(program); i += 4 {
+		opcode := program[i]
+		input1 := program[i+1]
+		input2 := program[i+2]
+		output := program[i+3]
 
 		if DEBUG {
 			fmt.Printf("OP: %d, IN1: %d, IN2: %d, OUT: %d\n", opcode, input1, input2, opcode)
 		}
 
 		switch opcode {
-		case 1:
-			// ADD
-			intcode[output] = intcode[input1] + intcode[input2]
+		case ADD:
+			program[output] = program[input1] + program[input2]
 			break
-		case 2:
-			// MULTIPLY
-			intcode[output] = intcode[input1] * intcode[input2]
+		case MULT:
+			program[output] = program[input1] * program[input2]
 			break
-		case 99:
-			// HALT
+		case STOP:
 			if DEBUG {
 				fmt.Println()
-				fmt.Println(intcode)
+				fmt.Println(program)
 			}
-			return intcode[0]
+			return program[0]
 		default:
 			fmt.Printf("error: %d: unknown opcode\n", opcode)
 			break
 		}
 	}
 	return -1
+}
+
+//================================================//
+// utilities for intcode programs				  //
+//================================================//
+
+// convert an array of string ints to int ints
+func atoiArray(s []string) []int {
+	var a []int
+
+	for _, i := range s {
+		n, _ := strconv.Atoi(i)
+		a = append(a, n)
+	}
+	return a
+}
+
+// read the file and load the program into memory
+func LoadIntoMemory(file string) ([]int, error) {
+	fp, err := os.Open(file)
+	if err != nil {
+		return nil, err
+	}
+	defer fp.Close()
+
+	scanner := bufio.NewScanner(fp)
+	scanner.Scan()
+	buf := scanner.Text()
+	fp.Close()
+
+	s := strings.Split(buf, ",")
+	return atoiArray(s), nil
 }

@@ -1,54 +1,44 @@
-/***
- * Intcode compiler - version 1
- *
- * 1 - ADD
- * 2 - MULT
- * 99 - QUIT
- *
- * */
-
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strconv"
-	"strings"
+	"math/rand"
+	"time"
 )
 
-const DEBUG = true
+const FILEPATH = "inputs/2"
+const CHECK = 19690720
 
-// convert an array of string ints to int ints
-func atoiArray(s []string) []int {
-	var a []int
-
-	for _, i := range s {
-		n, _ := strconv.Atoi(i)
-		a = append(a, n)
-	}
-	return a
+func part1() int {
+	n, _ := LoadIntoMemory(FILEPATH)
+	// restore 1202 program alarm
+	n[1] = 12
+	n[2] = 2
+	return RunIntcode(n, false)
 }
 
-// read in a list of intcode numbers
-func readToString() []string {
-	var buf string
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		buf = scanner.Text()
-	}
+func part2() int {
+	var noun int
+	var verb int
+	rand.Seed(time.Now().Unix())
+	for true {
+		noun = rand.Intn(99)
+		verb = rand.Intn(99)
 
-	intcodes := strings.Split(buf, ",")
-	return intcodes
+		ints, _ := LoadIntoMemory(FILEPATH)
+		ints[1] = noun
+		ints[2] = verb
+		ret := RunIntcode(ints, false)
+		if ret == CHECK {
+			return 100*noun + verb
+			break
+		}
+	}
+	return -1
 }
 
 func main() {
 
-	// read in list of ints
-	c := readToString()
-
-	// convert strings to an array of ints
-	intcodes := atoiArray(c)
-	n := Interpreter(intcodes, DEBUG)
-	fmt.Println(n)
+	fmt.Println("part 1:", part1())
+	fmt.Println("part 2:", part2())
 }

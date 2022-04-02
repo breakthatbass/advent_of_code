@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
 )
 
 func part2(mass int) (total int) {
@@ -30,7 +33,12 @@ func getMass(n []int) (int, int) {
 
 func main() {
 
-	n := ReadInts()
+	var n []int
+	scan := bufio.NewScanner(os.Stdin)
+	for scan.Scan() {
+		line, _ := strconv.Atoi(scan.Text())
+		n = append(n, line)
+	}
 
 	mass, biggermass := getMass(n)
 
