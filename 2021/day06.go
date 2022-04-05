@@ -30,7 +30,7 @@ func lanternInit(fish []int) map[int]int {
 	return lanterns
 }
 
-// a single day in the ofe of a breeding lantern fish
+// a single day in the life of a breeding lantern fish
 func breed(fish map[int]int) map[int]int {
 	r := make(map[int]int)
 	for f, count := range fish {
