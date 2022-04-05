@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
 )
 
 const LEN = 2000 // 2000 lines in input file
@@ -35,8 +38,18 @@ func part2(n []int) int {
 	return increase
 }
 
+func readInts() []int {
+	var n []int
+	scan := bufio.NewScanner(os.Stdin)
+	for scan.Scan() {
+		line, _ := strconv.Atoi(scan.Text())
+		n = append(n, line)
+	}
+	return n
+}
+
 func main() {
-	n := ReadInts()
+	n := readInts()
 
 	fmt.Println(part1(n))
 	fmt.Println(part2(n))
