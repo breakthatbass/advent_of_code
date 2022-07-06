@@ -2,67 +2,49 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
-	"strconv"
-	"time"
+	"fmt"
+	"strings"
 )
 
-var a int
-var b int
-
-func readInts() []int {
-	var n []int
-	scan := bufio.NewScanner(os.Stdin)
-	for scan.Scan() {
-		line, _ := strconv.Atoi(scan.Text())
-		n = append(n, line)
-	}
-	return n
-}
-
-func part1(n []int) {
-	for i, i2 := range n {
-		time.Sleep(1 * time.Second)
-		for j, j2 := range n {
-			if i == j {
-				continue
-			}
-			if i2+j2 == 2020 {
-				a = i2 * j2
-				return
+func part1(n []int) int {
+	for _, i := range n {
+		for _, j := range n {
+			if i + j == 2020 {
+				return i * j
 			}
 		}
 	}
-	return
+	return -1
 }
 
-func part2(n []int) {
-	for i, i2 := range n {
-		time.Sleep(1 * time.Second)
-		for j, j2 := range n {
-			for k, k2 := range n {
-				if i == j && i == k {
-					continue
-				}
-				if i2+j2+k2 == 2020 {
-					b = i2 * j2 * k2
-					return
+func part2(n []int) int {
+	for _, i := range n {
+		for _, j := range n {
+			for _, k := range n {
+				if i + j +k == 2020 {
+					return i * j * k
 				}
 			}
 		}
 	}
-	return
+	return -1
 }
 
 func main() {
+	var nums []int
+	var n int
 
-	nums := readInts()
-	a = 0
-	b = 0
+	scan := bufio.NewScanner(os.Stdin)
+	for scan.Scan() {
+		f := strings.NewReader(scan.Text())
+		fmt.Fscanf(f, "%d", &n)
+		nums = append(nums, n)
+	}
 
-	go part1(nums)
-	go part2(nums)
+	a := part1(nums)
+	b := part2(nums)
 
-	fmt.Println(a, b)
+	fmt.Println("part 1:", a)
+	fmt.Println("part 2:", b)
 }
