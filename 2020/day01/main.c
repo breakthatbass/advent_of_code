@@ -6,7 +6,7 @@
  *    debug:   gcc main.c -o main -g -fsanitize=address -Wall
  *    release: gcc main.c -o main -O2
  * 
- * run:         ./main < input
+ * run:        ./main < input
  **/
 #include <stdio.h>
 #include <stdint.h>
