@@ -1,3 +1,11 @@
+/**
+ * day 01 2020
+ * https://adventofcode.com/2020/day/1
+ *
+ * compile:			go build main.go
+ * run:				./main < input
+ * compile & run:	go run main.go < input
+ **/
 package main
 
 import (
