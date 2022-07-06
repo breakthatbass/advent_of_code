@@ -1,9 +1,17 @@
+/**
+ * day 02 2020
+ * https://adventofcode.com/2020/day/2
+ *
+ * compile:			go build main.go
+ * run:				./main < input
+ * compile & run:	go run main.go < input
+ **/
 package main
 
 import (
 	"bufio"
-	"os"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -22,6 +30,7 @@ func sled(min int, max int, c byte, pass string) int {
 }
 
 func toboggan(min int, max int, c byte, pass string) int {
+	// no XOR in go but this is the same logic
 	if (pass[min-1] == c) != (pass[max-1] == c) {
 		return 1
 	}
