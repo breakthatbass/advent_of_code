@@ -15,12 +15,12 @@ import (
 	"sort"
 )
 
-// get upper 7 bits
+// get upper 7 bits - the 'F' and 'B' part
 func upper7Bits(b int) int {
 	return (b >> 3) & 0x7F
 }
 
-// get lower 3 bits
+// get lower 3 bits - the 'L' and 'R' part
 func lower3bits(b int) int {
 	return b & 0x7
 }
@@ -39,15 +39,13 @@ func toBin(s string) int {
 }
 
 func findMyTicket(tkts []int) int {
-
 	sort.Ints(tkts[:])
-
 	// start 5 tickets in
 	for i := 5; i < len(tkts); i++ {
-		prevTkt := tkts[i] - 1
-		nextTkt := tkts[i] + 1
-
-		if tkts[i-1] != prevTkt || tkts[i+1] != nextTkt {
+		// the ticket we want is the missing one
+		// so if tkts[i] is 713 and there is no 714
+		// then 714 is our ticket
+		if tkts[i + 1] != tkts[i] + 1 {
 			return tkts[i] + 1
 		}
 	}
@@ -70,9 +68,9 @@ func main() {
 		if seat > largestSeat {
 			largestSeat = seat
 		}
-
 		tkts = append(tkts, seat)
 	}
+	// part 2
 	mySeat := findMyTicket(tkts)
 
 	fmt.Println("part 1:", largestSeat)
