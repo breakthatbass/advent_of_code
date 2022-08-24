@@ -13,7 +13,6 @@ const (
 )
 
 
-
 func _calculateScore(deck *queue) int {
 	total := 0
 	numCards := deck.getLen()
@@ -51,6 +50,7 @@ func playCards(deck1, deck2 *queue) int {
 	return _calculateScore(deck1)
 }
 
+
 func main() {
 	
 	player1 := queueInit()
@@ -63,12 +63,10 @@ func main() {
 		
 		line := scan.Text()
 
-		if line == "Player 1:" {
+		if line == "Player 1:" || line == "" {
 			continue
 		} else if line == "Player 2:" {
 			playerState = PLAYER_2
-			continue
-		} else if line == "" {
 			continue
 		}
 		
@@ -80,8 +78,6 @@ func main() {
 		case PLAYER_2:
 			player2.addCard(card)
 		}
-
-		
 	}
 	fmt.Println("part 1:", playCards(player1, player2))
 }
@@ -152,18 +148,13 @@ func (q *queue) getLen() int {
 func (q *queue) printList() {
 	tmp := q.head
 	if tmp == nil {
-		fmt.Println("list is empty")
 		return
 	}
 
-	//fmt.Println(tmp.card)
 	for tmp.next != nil {
-		//fmt.Printf("%+v\n", *cur)
-		//fmt.Println(tmp.card)
 		fmt.Printf("%d ", tmp.card)
 		tmp = tmp.next
 	}
-	fmt.Printf("%d ", tmp.card)
-	fmt.Println()
+	fmt.Printf("%d\n", tmp.card)
 }
 
