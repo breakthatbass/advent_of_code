@@ -23,6 +23,7 @@ const (
 	PLAYER_2 = 2
 )
 
+// calculate the score of the winning hand of cards
 func calculateScore(deck *queue) int {
 	total := 0
 	numCards := deck.len()
@@ -36,6 +37,7 @@ func calculateScore(deck *queue) int {
 	return total
 }
 
+// part 1
 func playCards(deck1, deck2 *queue) int {
 
 	for deck1.len() > 0 && deck2.len() > 0 {
@@ -58,13 +60,14 @@ func playCards(deck1, deck2 *queue) int {
 	return PLAYER_1
 }
 
-// copy numOfCards nodes from deck into another queue
+// copy as many as numOfCards into a new deck
+// for using when calling recursionCards()
 func copyDeck(deck *queue, numOfCards int) *queue {
-	tmp := deck.head
-	if tmp == nil {
+	if deck.head == nil {
 		return nil
 	}
 
+	tmp := deck.head
 	deckCopy := queueInit()
 
 	for tmp != nil && numOfCards > 0 {
@@ -75,39 +78,41 @@ func copyDeck(deck *queue, numOfCards int) *queue {
 	return deckCopy
 }
 
-
-var s1 string
 // check savedDecks array to see if both of these decks
 // have been seen before in game
-func compareDecks(deck *queue, savedDecks []string) bool {
-	s1 = deck.toString()
+func compareDecks(deck string, savedDecks []string) bool {
+	// we only have one deck as a parameter rather than both
+	// this is because the same final answer is recieved whether
+	// one or both of the decks are compared. This probably shouldn't
+	// be the case from the language of the directions, but it
+	// saves some resources here to deal with only one deck
 
+	// convert the deck to a string
+	//s1 = deck.toString()
+
+	// check if that string in the savedDecks array
 	for _, d := range savedDecks {
-		if s1 == d {
+		if deck == d {
 			return true
 		}
 	}
 	return false
 }
 
-var recursionWinner int
-var gameNumber int
-var i int
-
 func recursionCards(deck1, deck2 *queue) int {
 	var winner int
 	round := 1
-	gameNumber++
+	//gameNumber++
 
 	var savedDecks []string
 
 	for deck1.len() > 0 && deck2.len() > 0 {
-
-		if compareDecks(deck1, savedDecks) {
+		deckStr := deck1.toString()
+		if compareDecks(deckStr, savedDecks) {
 			return PLAYER_1
 		}
 
-		savedDecks = append(savedDecks, s1)
+		savedDecks = append(savedDecks, deckStr)
 
 		deck1Card := deck1.drawCard()
 		deck2Card := deck2.drawCard()
@@ -182,15 +187,14 @@ func main() {
 	}
 
 	n = recursionCards(p1cpy, p2cpy)
-
-	fmt.Println("player 1 score", calculateScore(player1))
-
+	if n == PLAYER_1 {
+		fmt.Println("part 1:", calculateScore(p1cpy))
+	} else {
+		fmt.Println("part 1:", calculateScore(p2cpy))
+	}
 }
 
-///////////////////////////////////////
-//									 //
-//	QUEUE STRUCTURE					 //
-///////////////////////////////////////
+// QUEUE STRUCTURE
 
 // a single card in a deck
 type node struct {
@@ -219,6 +223,8 @@ func newNode(v int) *node {
 	}
 }
 
+// convert each card in a deck into a single string
+// this is used for comparing the decks
 func (q *queue) toString() string {
 	var v []string
 	tmp := q.head
@@ -231,11 +237,6 @@ func (q *queue) toString() string {
 	v = append(v, fmt.Sprintf("%d", tmp.card))
 	res := strings.Join(v, "")
 	return res
-}
-
-// peek at the top card
-func (q *queue) peek() int {
-	return q.head.card
 }
 
 // pull a card from the top of the card deck
@@ -252,8 +253,6 @@ func (q *queue) drawCard() int {
 // add a card to the bottom of the card deck
 func (q *queue) addCard(c int) {
 	n := newNode(c)
-	//fmt.Println(poo)
-	//poo++
 	if q.head == nil {
 		// empty list
 		q.head = n
@@ -285,7 +284,11 @@ func (q *queue) printList() {
 	fmt.Printf("%d\n", tmp.card)
 }
 
+// create a copy of a deck of cards
 func (q *queue) deckcpy() *queue {
+	if q.head == nil {
+		return nil
+	}
 	d := queueInit()
 	tmp := q.head
 	for tmp.next != nil {
