@@ -14,6 +14,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"log"
 )
 
 var DEBUG = false
@@ -101,23 +102,19 @@ func compareDecks(deck string, savedDecks []string) bool {
 
 func recursionCards(deck1, deck2 *queue) int {
 	var winner int
-	round := 1
-	//gameNumber++
-
 	var savedDecks []string
 
 	for deck1.len() > 0 && deck2.len() > 0 {
+		
 		deckStr := deck1.toString()
 		if compareDecks(deckStr, savedDecks) {
 			return PLAYER_1
 		}
-
 		savedDecks = append(savedDecks, deckStr)
 
 		deck1Card := deck1.drawCard()
 		deck2Card := deck2.drawCard()
 
-		// recurse
 		if deck1.len() >= deck1Card && deck2.len() >= deck2Card {
 			// winner determined by recursive combat
 			winner = recursionCards(copyDeck(deck1, deck1Card), copyDeck(deck2, deck2Card))
@@ -128,6 +125,7 @@ func recursionCards(deck1, deck2 *queue) int {
 				winner = PLAYER_2
 			}
 		}
+
 		switch winner {
 		case PLAYER_1:
 			deck1.addCard(deck1Card)
@@ -136,9 +134,7 @@ func recursionCards(deck1, deck2 *queue) int {
 			deck2.addCard(deck2Card)
 			deck2.addCard(deck1Card)
 		}
-		round++
 	}
-
 	if deck1.len() == 0 {
 		return PLAYER_2
 	}
@@ -146,7 +142,6 @@ func recursionCards(deck1, deck2 *queue) int {
 }
 
 func main() {
-
 	player1 := queueInit()
 	player2 := queueInit()
 
@@ -179,20 +174,27 @@ func main() {
 	p1cpy := player1.deckcpy()
 	p2cpy := player2.deckcpy()
 
+	// part 1
 	n := playCards(player1, player2)
 	if n == PLAYER_1 {
-		fmt.Println("part 1:", calculateScore(player1))
+		n = calculateScore(player1)
+		fmt.Println("part 1:", n)
 	} else {
-		fmt.Println("part 1:", calculateScore(player2))
+		n = calculateScore(player2)
+		fmt.Println("part 1:", n)
 	}
 
+	// part 2
 	n = recursionCards(p1cpy, p2cpy)
 	if n == PLAYER_1 {
-		fmt.Println("part 1:", calculateScore(p1cpy))
+		n = calculateScore(p1cpy)
+		fmt.Println("part 1:", n)
 	} else {
-		fmt.Println("part 1:", calculateScore(p2cpy))
+		n = calculateScore(p2cpy)
+		fmt.Println("part 1:", n)
 	}
 }
+
 
 // QUEUE STRUCTURE
 
