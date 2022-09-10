@@ -87,9 +87,6 @@ func compareDecks(deck string, savedDecks []string) bool {
 	// be the case from the language of the directions, but it
 	// saves some resources here to deal with only one deck
 
-	// convert the deck to a string
-	//s1 = deck.toString()
-
 	// check if that string in the savedDecks array
 	for _, d := range savedDecks {
 		if deck == d {
