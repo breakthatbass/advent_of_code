@@ -14,7 +14,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"log"
 )
 
 var DEBUG = false
