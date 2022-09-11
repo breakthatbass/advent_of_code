@@ -28,23 +28,20 @@ var mem []Mem
 
 
 func updateBitmasks(s string) {
-	and := 0
-	or := 0
+	maskAnd = 0
+	maskOr = 0
 	for _, c := range s {
 		if c == 'X'{
-			and = (and << 1) | 1
-			or = (or << 1) | 0
+			maskAnd = (maskAnd << 1) | 1; maskOr = (maskOr << 1) | 0
 		} else if c == '1' {
-			or = (or << 1) | 1
-			and = (and << 1) | 0
+			maskOr = (maskOr << 1) | 1; maskAnd = (maskAnd << 1) | 0
 		} else {
 			// and keep the zeros as zeros
-			and = (and << 1) | 0
-			or = (or << 1) | 0
+			maskAnd = (maskAnd << 1) | 0; maskOr = (maskOr << 1) | 0
 		}
 	}
-	maskAnd = and
-	maskOr = or
+	//maskAnd = and
+	//maskOr = or
 }
 
 
