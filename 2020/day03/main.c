@@ -1,24 +1,35 @@
+/**
+ * day 02 2020
+ * https://adventofcode.com/2020/day/2
+ *
+ * compile:
+ *    debug:   gcc main.c -o main -g -fsanitize=address -Wall
+ *    release: gcc main.c -o main -O2
+ * 
+ * run:        ./main < input
+ **/
 #include <stdio.h>
+#include <stdint.h>
 
 #define MAXLINE 35
 #define MAXLEN 323	// input is 323 lines long
 
-static int len = 0;	// variable for file length
+static uint16_t len = 0;	// variable for file length
 static char hill[MAXLEN][MAXLINE];
 
 
 /*	ride the toboggan down the hill and hit some trees!
  *	...and count them while you're at it. */
-unsigned long ride_snowy_hill(int right, int down)
+uint8_t ride_snowy_hill(uint8_t right, uint8_t down)
 {
-	int x = 0; 
-	int y = 0;
-	unsigned long tree_count = 0;
+	uint8_t x = 0; 
+	uint8_t y = 0;
+	uint8_t tree_count = 0;
 
 	while (x < len)	{
 		if (hill[x][y % 31] == '#') tree_count++;
-		y+=right;
-		x+=down;
+		y += right;
+		x += down;
 	}
 	return tree_count;
 }
@@ -27,8 +38,8 @@ unsigned long ride_snowy_hill(int right, int down)
 int main()
 {
 	int c;
-	int i = 0;
-	int j = 0;
+	uint16_t i = 0;
+	uint16_t j = 0;
 
 	while ((c = fgetc(stdin)) != EOF) {
 		if (c == '\n') {
@@ -39,7 +50,7 @@ int main()
 		else hill[i][j++] = (char)c;
 	}
 
-	unsigned long slopes = 1;
+	uint32_t slopes = 1;
 	slopes *= ride_snowy_hill(1, 1);
 	slopes *= ride_snowy_hill(3, 1);
 	slopes *= ride_snowy_hill(5, 1);
@@ -49,7 +60,7 @@ int main()
 	long p1 = ride_snowy_hill(3, 1);
 
 	printf("part 1: %lu\n", p1);
-	printf("part 2: %lu\n", slopes);
+	printf("part 2: %u\n", slopes);
 
 	return 0;
 }
