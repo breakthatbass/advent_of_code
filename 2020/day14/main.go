@@ -32,16 +32,19 @@ func updateBitmasks(s string) {
 	maskOr = 0
 	for _, c := range s {
 		if c == 'X'{
-			maskAnd = (maskAnd << 1) | 1; maskOr = (maskOr << 1) | 0
+			// set 1 in maskAnd if bit is 'X'
+			maskAnd = (maskAnd << 1) | 1
+			maskOr <<= 1
 		} else if c == '1' {
-			maskOr = (maskOr << 1) | 1; maskAnd = (maskAnd << 1) | 0
+			// set 1 in maskOr if bit is '1'
+			maskOr = (maskOr << 1) | 1
+			maskAnd <<= 1
 		} else {
 			// and keep the zeros as zeros
-			maskAnd = (maskAnd << 1) | 0; maskOr = (maskOr << 1) | 0
+			maskAnd <<= 1
+			maskOr <<= 1
 		}
 	}
-	//maskAnd = and
-	//maskOr = or
 }
 
 
