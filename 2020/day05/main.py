@@ -17,7 +17,10 @@ def to_bin(ticket):
 def find_my_tkt(tkts):
     tkts = sorted(tkts)
     l = len(tkts)
-    for i in range(10, l):
+    start = tkts[0] # start as far in as possible
+    print(start)
+    for i in range(start, l):
+        # assuming we'll find the ticket before going out of bounds here
         if tkts[i + 1] != tkts[i] + 1:
             # this means there's a missing tkt, which would be mine
             return tkts[i] + 1
