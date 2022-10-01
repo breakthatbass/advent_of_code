@@ -12,12 +12,10 @@ def o2_gen_rating(bins):
     i = BIT_WIDTH-1
     while i >= 0 and len(bins) > 1:
         ones = 0
-        zeroes = 0
         for b in bins:
             # get the number of ones in the list at bit i
             ones += ((b >> i) & 1)
-        zeroes = len(bins) - ones
-        if zeroes > ones:
+        if (len(bins) - ones) > ones:
             bins = [b for b in bins if not ((b >> i) & 1)]
         else:
             # more ones or equal amount of ones and zeroes
@@ -30,12 +28,10 @@ def o2_scrub_rating(bins):
     i = BIT_WIDTH-1
     while i >= 0 and len(bins)> 1:
         ones = 0
-        zeroes = 0
         for b in bins:
             # get the number of ones in the list at bit i
             ones += ((b >> i) & 1)
-        zeroes = len(bins) - ones
-        if zeroes > ones:
+        if (len(bins) - ones) > ones:
             bins = [b for b in bins if ((b >> i) & 1)]
         else:
             # more ones or equal amount of ones and zeroes
