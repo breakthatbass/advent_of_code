@@ -38,7 +38,6 @@ def life_suppoert_rating(bins):
             else:
                 o2_scrub_list = [b for b in o2_scrub_list if not ((b >> i) & 1)]
         i-=1
-
     return o2_gen_list[0] * o2_scrub_list[0]
 
 
