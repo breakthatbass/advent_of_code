@@ -8,37 +8,39 @@ def stoi(binstr):
         b = b << 1 | (c == '1')
     return b
 
-def o2_gen_rating(bins):
-    i = BIT_WIDTH-1
-    while i >= 0 and len(bins) > 1:
-        ones = 0
-        for b in bins:
-            # get the number of ones in the list at bit i
-            ones += ((b >> i) & 1)
-        if (len(bins) - ones) > ones:
-            bins = [b for b in bins if not ((b >> i) & 1)]
-        else:
-            # more ones or equal amount of ones and zeroes
-            bins = [b for b in bins if ((b >> i) & 1)]
-        i-=1
-    # should be only a single element left in list at this point
-    return bins[0]
+# get the amount of 1 bits at pos in a list of numbers
+def get_one_bits(bins, pos):
+    ones = 0
+    for b in bins:
+        ones += ((b >> pos) & 1)
+    return ones
 
-def o2_scrub_rating(bins):
+# part 2
+def life_suppoert_rating(bins):
+    o2_gen_list = bins
+    o2_scrub_list = bins
     i = BIT_WIDTH-1
-    while i >= 0 and len(bins)> 1:
-        ones = 0
-        for b in bins:
-            # get the number of ones in the list at bit i
-            ones += ((b >> i) & 1)
-        if (len(bins) - ones) > ones:
-            bins = [b for b in bins if ((b >> i) & 1)]
-        else:
-            # more ones or equal amount of ones and zeroes
-            bins = [b for b in bins if not ((b >> i) & 1)]
+    while i >= 0 and (len(o2_gen_list) > 1 or len(o2_scrub_list) > 1):
+        gen_ones = get_one_bits(o2_gen_list, i)
+        scrub_ones = get_one_bits(o2_scrub_list, i)
+        gen_size = len(o2_gen_list)
+        scrub_size = len(o2_scrub_list)
+
+        if not gen_size == 1:
+            if (gen_size - gen_ones) > gen_ones:
+                o2_gen_list = [b for b in o2_gen_list if not ((b >> i) & 1)]
+            else:
+                o2_gen_list = [b for b in o2_gen_list if ((b >> i) & 1)]
+
+        if not scrub_size == 1:
+            if (scrub_size - scrub_ones) > scrub_ones:
+                o2_scrub_list = [b for b in o2_scrub_list if ((b >> i) & 1)]
+            else:
+                o2_scrub_list = [b for b in o2_scrub_list if not ((b >> i) & 1)]
         i-=1
-    # should be only a single element left in list at this point
-    return bins[0]
+
+    return o2_gen_list[0] * o2_scrub_list[0]
+
 
 # part 1
 def power_consumption(bins):
@@ -64,10 +66,8 @@ with open(INPUT) as f:
 	buf = [stoi(line.strip()) for line in f.readlines()]
 
 part1 = power_consumption(buf)
-
-part2 = o2_gen_rating(buf) * o2_scrub_rating(buf)
+part2 = life_suppoert_rating(buf)
 print('part 1:', part1)
 print('part 2:', part2)
-
 assert part1 == 2648450
 assert part2 == 2845944
