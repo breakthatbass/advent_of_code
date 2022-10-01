@@ -44,7 +44,6 @@ def life_suppoert_rating(bins):
 
 # part 1
 def power_consumption(bins):
- 
     gamma = 0
     epsilon = 0
     i = BIT_WIDTH-1
