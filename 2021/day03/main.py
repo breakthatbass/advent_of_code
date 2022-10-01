@@ -49,14 +49,10 @@ def power_consumption(bins):
     epsilon = 0
     i = BIT_WIDTH-1
     while i >= 0:
-        ones = 0
-        for b in bins:
-            ones += ((b >> i) & 1)
-        if ones > (len(bins) - ones):
-            # more ones
+        ones = get_one_bits(bins, i)
+        if ones > (len(bins) - ones):  # more ones
             gamma |= (1 << i)
-        else:
-            # more zeroes
+        else:  # more zeroes
             epsilon |= (1 << i)
         i -= 1
     return gamma*epsilon
