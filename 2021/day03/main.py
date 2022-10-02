@@ -16,7 +16,7 @@ def get_one_bits(bins, pos):
     return ones
 
 # part 2
-def life_suppoert_rating(bins):
+def life_support_rating(bins):
     o2_gen_list = bins
     o2_scrub_list = bins
     i = BIT_WIDTH-1
@@ -60,7 +60,7 @@ with open(INPUT) as f:
 	buf = [stoi(line.strip()) for line in f.readlines()]
 
 part1 = power_consumption(buf)
-part2 = life_suppoert_rating(buf)
+part2 = life_support_rating(buf)
 print('part 1:', part1)
 print('part 2:', part2)
 assert part1 == 2648450
