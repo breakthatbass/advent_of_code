@@ -42,6 +42,3 @@ for play in plays:
 
 print('part 1:', part_one_score)
 print('part 2:', part_two_score)
-
-assert part_one_score == 10404
-assert part_two_score == 10334
