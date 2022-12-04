@@ -18,13 +18,9 @@ def do_they_overlap(range_1, range_2):
 def num_of_overlaps(range_1, range_2):
     '''part 2: do any values in the ranges overlap?'''
     b = [n for n in range_1]
-    overlap = False
     for n in range_2:
         if n in b:
-            overlap = True
-            break
-    if overlap:
-        return 1
+            return 1
     return 0
 
 
