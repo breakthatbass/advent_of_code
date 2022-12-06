@@ -30,19 +30,15 @@ def parse_crate_line(line):
         i += 1
 
 def move_crates(num_to_move, old_pile, new_pile):
-    '''move crates from old_pile to new_pile in stack'''
-    # get the box stack
-    box_stack_index = 0
+    '''move crates from old_pile to new_pile in both stacks'''
+    # part 2: get the box stack and move it over to the new pile
     box_stack = crate_stacks_2[old_pile][-num_to_move:]
-    # then delete the box stack
     del crate_stacks_2[old_pile][-num_to_move:]
+    crate_stacks_2[new_pile].extend(box_stack)
+    # part 1: move over boxes individually
     while num_to_move > 0:
-        # part 1
         n = crate_stacks_1[old_pile].pop()
         crate_stacks_1[new_pile].append(n)
-        # part 2
-        crate_stacks_2[new_pile].append(box_stack[box_stack_index])
-        box_stack_index+=1
         num_to_move -= 1
 
 def top_crates(crate_stack):
