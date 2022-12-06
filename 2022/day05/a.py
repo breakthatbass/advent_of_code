@@ -51,8 +51,6 @@ def top_crates(crate_stack):
     return crates
 
 def main():
-    global box_stacks_1
-    global box_stacks_2
     with open(INPUT) as f:
         lines = [line.strip('\n') for line in f.readlines()]
     # create the box stacks
