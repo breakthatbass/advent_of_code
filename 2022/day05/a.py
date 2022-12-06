@@ -47,7 +47,7 @@ def top_crates(crate_stack):
     num_stacks = len(crate_stack)
     for i in range(num_stacks):
         s = crate_stack[i].pop()
-        crates += str(s)
+        crates += s
     return crates
 
 def main():
@@ -72,10 +72,6 @@ def main():
     p2 = top_crates(crate_stacks_2)
     print('part 1:', p1)
     print('part 2:', p2)
-
-    if INPUT == 'input':
-        assert p1 == 'RLFNRTNFB'
-        assert p2 == 'MHQTLJRLB'
 
 if __name__ == '__main__':
     main()
