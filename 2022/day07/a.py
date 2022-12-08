@@ -3,7 +3,6 @@ INPUT = 'input'
 TOTAL_DISK_SPACE = 70000000
 SPACE_NEEDED = 30000000
 PART_1_TARGET_SIZE = 100000
-PART_2_TARGET_SIZE = 8381165
 
 with open(INPUT) as f:
     cmds = [line.strip() for line in f.readlines()]
