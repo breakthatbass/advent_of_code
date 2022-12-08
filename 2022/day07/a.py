@@ -12,9 +12,6 @@ class File:
     def __init__(self, fname, fsize):
         self.fname = fname
         self.fsize = fsize
-    
-    def __repr__(self):
-        return f'file: {self.fname} size: {self.fsize}'
 
 class Dir:
     def __init__(self, dname, parent=None):
@@ -24,9 +21,6 @@ class Dir:
         self.children = []
         self.total_size = 0
     
-    def __repr__(self):
-        return f'dir: {self.dname} size: {self.total_size} childen: {self.children}'
-    
     def add_to_size(self, size):
         self.total_size += size
         if self.parent:
@@ -35,6 +29,7 @@ class Dir:
     def add_file(self, f):
         self.files.append(f)
         self.add_to_size(f.fsize)
+
 
 root_dir = Dir('/')
 current_dir = root_dir
