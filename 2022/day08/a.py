@@ -119,10 +119,10 @@ part1_total = (count_visible_trees(trees) + (len(trees)*2) + ((len(trees[0])-2)*
 print('part 1:', part1_total)
 print('part 2:', max_score)
 
-if INPUT == 'input':
-    assert part1_total > 476
-    assert max_score > 287640
-    assert max_score < 5762400
+
+#################################################
+# TESTS                                         #
+#################################################
 
 @pytest.mark.parametrize(
     "row, col, visible_trees",
