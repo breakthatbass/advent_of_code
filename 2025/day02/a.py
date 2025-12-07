@@ -32,11 +32,7 @@ def part2(start, end):
         while True:
             if i >= len(id_str):
                 break
-            id_list = textwrap.wrap(id_str, i)
-            if len(id_list[0]) != len(id_list[-1]):
-                i += 1
-                break
-            if len(set(id_list)) == 1:
+            if len(set(textwrap.wrap(id_str, i))) == 1:
                 print('\t--> found invalid:', id_str)
                 invalid_total += int(id_str)
                 break
