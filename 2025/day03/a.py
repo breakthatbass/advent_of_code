@@ -1,4 +1,4 @@
-INPUT = 'input.txt'
+INPUT = 'test_input.txt'
 
 with open(INPUT) as f:
     banks = [line.strip() for line in f.readlines()]
@@ -25,6 +25,9 @@ def part1(bank):
     joltage = int(f'{max_digit}{other_largest}')
     print('\t--> total joltage:', joltage)
     return joltage
+
+def part2():
+    pass
 
 for bank in banks:
     total_joltage_part1 += part1(bank)
